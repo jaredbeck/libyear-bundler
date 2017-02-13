@@ -1,0 +1,33 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activesupport (4.2.7.1)
+      i18n (~> 0.7)
+      json (~> 1.7, >= 1.7.7)
+      minitest (~> 5.1)
+      thread_safe (~> 0.3, >= 0.3.4)
+      tzinfo (~> 1.1)
+    i18n (0.8.0)
+    json (1.8.6)
+    minitest (5.10.1)
+    minitest_to_rspec (0.6.0)
+      ruby_parser (~> 3.7)
+      sexp2ruby (~> 0.0.2)
+    ruby_parser (3.8.4)
+      sexp_processor (~> 4.1)
+    sexp2ruby (0.0.4)
+      activesupport (~> 4.2)
+      sexp_processor (~> 4.6)
+    sexp_processor (4.8.0)
+    thread_safe (0.3.5)
+    tzinfo (1.2.2)
+      thread_safe (~> 0.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  minitest_to_rspec (>= 0.6.0)
+
+BUNDLED WITH
+   1.14.3

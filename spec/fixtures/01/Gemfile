@@ -1,0 +1,2 @@
+source 'https://rubygems.org'
+gem "minitest_to_rspec", "0.6.0"

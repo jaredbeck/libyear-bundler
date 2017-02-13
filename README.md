@@ -1,6 +1,6 @@
 # Libyear
 
-A simple measure of software dependency freshness
+A simple measure of dependency freshness for ruby apps.
 
 A libyear (library year) is a measure of how old a software dependency is.
 

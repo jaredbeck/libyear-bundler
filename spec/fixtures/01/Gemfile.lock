@@ -27,7 +27,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  minitest_to_rspec (>= 0.6.0)
+  minitest_to_rspec (= 0.6.0)
 
 BUNDLED WITH
-   1.14.3
+   1.14.4

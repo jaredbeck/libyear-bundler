@@ -3,6 +3,21 @@
 This project follows [semver 2.0.0][1] and the recommendations
 of [keepachangelog.com][2].
 
+## 0.1.2 (2017-02-16)
+
+Breaking changes:
+
+- None
+
+Added:
+
+- None
+
+Fixed:
+
+- Better handling of weird sources like rails-assets
+- Wider report columns
+
 ## 0.1.1 (2017-02-14)
 
 Breaking changes:

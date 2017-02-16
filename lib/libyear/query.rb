@@ -25,7 +25,9 @@ module Libyear
       gems.each do |gem|
         di = release_date(gem[:name], gem[:installed][:version])
         dn = release_date(gem[:name], gem[:newest][:version])
-        if dn <= di
+        gem[:installed][:date] = di
+        gem[:newest][:date] = dn
+        if di.nil? || dn.nil? || dn <= di
           # Known issue: Backports and maintenance releases of older minor versions.
           # Example: json 1.8.6 (2017-01-13) was released *after* 2.0.3 (2017-01-12)
           years = 0.0
@@ -33,8 +35,6 @@ module Libyear
           days = (dn - di).to_f
           years = days / 365.0
         end
-        gem[:installed][:date] = di
-        gem[:newest][:date] = dn
         gem[:libyears] = years
       end
       gems
@@ -65,6 +65,10 @@ module Libyear
     def release_date(gem_name, gem_version)
       dep = ::Bundler::Dependency.new(gem_name, gem_version)
       tuples, _errors = ::Gem::SpecFetcher.fetcher.search_for_dependency(dep)
+      if tuples.empty?
+        $stderr.puts "Could not find release date for: #{gem_name}"
+        return nil
+      end
       tup, source = tuples.first # Gem::NameTuple
       spec = source.fetch_spec(tup) # raises Gem::RemoteFetcher::FetchError
       spec.date.to_date

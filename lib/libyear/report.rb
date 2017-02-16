@@ -14,7 +14,7 @@ module Libyear
         sum_years += years
         puts(
           format(
-            "%20s%10s%15s%10s%15s%10.1f",
+            "%30s%15s%15s%15s%15s%10.1f",
             gem[:name],
             gem[:installed][:version],
             gem[:installed][:date],

@@ -3,6 +3,20 @@
 This project follows [semver 2.0.0][1] and the recommendations
 of [keepachangelog.com][2].
 
+## 0.1.3 (2017-03-07)
+
+Breaking changes:
+
+- None
+
+Added:
+
+- None
+
+Fixed:
+
+- Don't crash when Gemfile uses git
+
 ## 0.1.2 (2017-02-16)
 
 Breaking changes:

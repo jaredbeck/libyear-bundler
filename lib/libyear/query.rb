@@ -63,7 +63,18 @@ module Libyear
     # Known issue: Probably performs a network request every time, unless
     # there's some kind of caching.
     def release_date(gem_name, gem_version)
-      dep = ::Bundler::Dependency.new(gem_name, gem_version)
+      dep = nil
+      begin
+        dep = ::Bundler::Dependency.new(gem_name, gem_version)
+      rescue ::Gem::Requirement::BadRequirementError => e
+        $stderr.puts "Could not find release date for: #{gem_name}"
+        $stderr.puts(e)
+        $stderr.puts(
+          "Maybe you used git in your Gemfile, which libyear doesn't support " \
+          "yet. Contributions welcome."
+        )
+        return nil
+      end
       tuples, _errors = ::Gem::SpecFetcher.fetcher.search_for_dependency(dep)
       if tuples.empty?
         $stderr.puts "Could not find release date for: #{gem_name}"

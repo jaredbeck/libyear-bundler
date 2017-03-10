@@ -5,7 +5,7 @@ require 'libyear_bundler/version'
 
 Gem::Specification.new do |spec|
   spec.name = "libyear-bundler"
-  spec.version = Libyear::VERSION
+  spec.version = LibyearBundler::VERSION
   spec.authors = ["Jared Beck"]
   spec.email = ["jared@jaredbeck.com"]
   spec.summary = "A simple measure of dependency freshness"

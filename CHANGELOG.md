@@ -3,6 +3,23 @@
 This project follows [semver 2.0.0][1] and the recommendations
 of [keepachangelog.com][2].
 
+## 0.2.0 (2017-03-10)
+
+Breaking changes:
+
+- Rename project
+  - Rename project from libyear-rb to libyear-bundler
+  - Rename binary from libyear to libyear-bundler
+  - Discussion: https://github.com/jaredbeck/libyear-rb/issues/1
+
+Added:
+
+- None
+
+Fixed:
+
+- None
+
 ## 0.1.3 (2017-03-07)
 
 Breaking changes:

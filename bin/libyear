@@ -1,3 +1,0 @@
-#!/usr/bin/env ruby
-require "libyear"
-Libyear::CLI.new(ARGV).run

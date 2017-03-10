@@ -1,9 +1,9 @@
 require "bundler/cli"
 require "bundler/cli/outdated"
-require "libyear/report"
-require "libyear/query"
+require "libyear_bundler/report"
+require "libyear_bundler/query"
 
-module Libyear
+module LibyearBundler
   class CLI
     def initialize(argv)
       validate_arguments(argv)

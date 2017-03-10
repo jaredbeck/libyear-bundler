@@ -1,7 +1,7 @@
 require "English"
 require "open3"
 
-module Libyear
+module LibyearBundler
   # Responsible for getting all the data that goes into the `Report`.
   class Query
     # Format of `bundle outdated --parseable` (BOP)

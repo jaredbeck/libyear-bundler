@@ -1,4 +1,4 @@
-module Libyear
+module LibyearBundler
   # Responsible presenting data from the `Query`. Should only be concerned
   # with presentation, nothing else.
   class Report

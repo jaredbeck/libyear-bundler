@@ -73,7 +73,7 @@ module LibyearBundler
 
     def grand_total
       sum_years = query.map { |gem| gem[:libyears] }.inject(0.0, :+)
-      puts sum_years.truncate(1)
+      puts format("%.1f", sum_years)
     end
   end
 end

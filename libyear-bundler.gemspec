@@ -17,5 +17,6 @@ Gem::Specification.new do |spec|
   spec.bindir = "bin"
   spec.executables = ["libyear-bundler"]
   spec.require_paths = ["lib"]
+  spec.required_ruby_version = ">= 2.1"
   spec.add_dependency "bundler", "~> 1.14"
 end

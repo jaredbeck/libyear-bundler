@@ -55,7 +55,7 @@ module LibyearBundler
         $stderr.puts "stderr: #{stderr}"
         $stderr.puts "stdout: #{stdout}"
         $stderr.puts "Try running `bundle install`."
-        Kernel.exit(1)
+        Kernel.exit(CLI::E_BUNDLE_OUTDATED_FAILED)
       end
       stdout
     end

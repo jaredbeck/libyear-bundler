@@ -3,6 +3,35 @@
 This project follows [semver 2.0.0][1] and the recommendations
 of [keepachangelog.com][2].
 
+## Unreleased
+
+Breaking changes:
+
+- None
+
+Added:
+
+- None
+
+Fixed:
+
+- None
+
+## 0.3.0 (2017-03-24)
+
+Breaking changes:
+
+- None
+
+Added:
+
+- [#1](https://github.com/jaredbeck/libyear-bundler/pull/1)
+  Add --grand-total option
+
+Fixed:
+
+- None
+
 ## 0.2.0 (2017-03-10)
 
 Breaking changes:

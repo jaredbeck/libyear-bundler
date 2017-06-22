@@ -80,19 +80,23 @@ module LibyearBundler
     end
 
     def grand_total
-      grand_total = if @argv.include?("--releases")
-                      releases_grand_total
-                    elsif @argv.include?("--versions")
-                      versions_grand_total
-                    elsif @argv.include?("--all")
-                      "#{libyears_grand_total}\n#" \
-                      "{releases_grand_total}\n#" \
-                      "{versions_grand_total}"
-                    else
-                      libyears_grand_total
-                    end
+      puts calculate_grand_total
+    end
 
-      puts grand_total
+    def calculate_grand_total
+      if @argv.include?("--releases")
+        releases_grand_total
+      elsif @argv.include?("--versions")
+        versions_grand_total
+      elsif @argv.include?("--all")
+        [
+          libyears_grand_total,
+          releases_grand_total,
+          versions_grand_total
+        ].join("\n")
+      else
+        libyears_grand_total
+      end
     end
 
     def libyears_grand_total

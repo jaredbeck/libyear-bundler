@@ -1,6 +1,6 @@
 module Calculators
-  # The version number delta is the differences in major, minor, and patch
-  # versions of the installed and newest releases of the gem
+  # The version number delta is the absolute difference between the highest-
+  # order version number of the installed and newest releases
   class VersionNumberDelta
     class << self
       def calculate(gem)
@@ -15,10 +15,16 @@ module Calculators
         patch_version_delta = version_delta(
           newest_version_tuple.patch, installed_version_tuple.patch
         )
-        [major_version_delta, minor_version_delta, patch_version_delta]
+        highest_order([major_version_delta, minor_version_delta, patch_version_delta])
       end
 
       private
+
+      def highest_order(arr)
+        arr[1] = arr[2] = 0 if arr[0] > 0
+        arr[2] = 0 if arr[1] > 0
+        arr
+      end
 
       def version_delta(newest_version, installed_version)
         delta = newest_version - installed_version

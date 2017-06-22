@@ -56,11 +56,11 @@ module LibyearBundler
     end
 
     def query
-      Query.new(@gemfile_path).execute
+      Query.new(@gemfile_path, @argv).execute
     end
 
     def report
-      @_report ||= Report.new(query, @argv)
+      @_report ||= Report.new(query)
     end
 
     def unexpected_options
@@ -84,16 +84,16 @@ module LibyearBundler
     end
 
     def calculate_grand_total
-      if @argv.include?("--releases")
-        releases_grand_total
-      elsif @argv.include?("--versions")
-        versions_grand_total
-      elsif @argv.include?("--all")
+      if report.to_h.key?(:version_sequence_delta) && report.to_h.key?(:version_number_delta)
         [
           libyears_grand_total,
           releases_grand_total,
           versions_grand_total
         ].join("\n")
+      elsif report.to_h.key?(:version_sequence_delta)
+        releases_grand_total
+      elsif report.to_h.key?(:version_number_delta)
+        versions_grand_total
       else
         libyears_grand_total
       end

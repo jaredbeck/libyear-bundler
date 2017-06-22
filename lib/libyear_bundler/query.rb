@@ -10,8 +10,9 @@ module LibyearBundler
     # Format of `bundle outdated --parseable` (BOP)
     BOP_FMT = /\A(?<name>[^ ]+) \(newest (?<newest>[^,]+), installed (?<installed>[^,)]+)/
 
-    def initialize(gemfile_path)
+    def initialize(gemfile_path, argv)
       @gemfile_path = gemfile_path
+      @argv = argv
     end
 
     def execute
@@ -26,9 +27,15 @@ module LibyearBundler
         )
       end
       gems.each do |gem|
+        if @argv.include?("--versions") || @argv.include?("--all")
+          gem[:version_number_delta] = ::Calculators::VersionNumberDelta.calculate(gem)
+        end
+
+        if @argv.include?("--releases") || @argv.include?("--all")
+          gem[:version_sequence_delta] = ::Calculators::VersionSequenceDelta.calculate(gem)
+        end
+
         gem[:libyears] = ::Calculators::Libyear.calculate(gem)
-        gem[:version_number_delta] = ::Calculators::VersionNumberDelta.calculate(gem)
-        gem[:version_sequence_delta] = ::Calculators::VersionSequenceDelta.calculate(gem)
       end
       gems
     end

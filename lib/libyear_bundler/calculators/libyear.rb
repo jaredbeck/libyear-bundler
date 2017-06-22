@@ -1,4 +1,6 @@
 module Calculators
+  # A libyear is the difference in time between releases of the newest and
+  # installed versions of the gem in years
   class Libyear
     class << self
       def calculate(gem)

@@ -1,12 +1,20 @@
 module Calculators
+  # The version number delta is the differences in major, minor, and patch
+  # versions of the installed and newest releases of the gem
   class VersionNumberDelta
     class << self
       def calculate(gem)
         newest_version_tuple = version_tuple(gem[:newest][:version].split('.'))
         installed_version_tuple = version_tuple(gem[:installed][:version].split('.'))
-        major_version_delta = version_delta(newest_version_tuple.major, installed_version_tuple.major)
-        minor_version_delta = version_delta(newest_version_tuple.minor, installed_version_tuple.minor)
-        patch_version_delta = version_delta(newest_version_tuple.patch, installed_version_tuple.patch)
+        major_version_delta = version_delta(
+          newest_version_tuple.major, installed_version_tuple.major
+        )
+        minor_version_delta = version_delta(
+          newest_version_tuple.minor, installed_version_tuple.minor
+        )
+        patch_version_delta = version_delta(
+          newest_version_tuple.patch, installed_version_tuple.patch
+        )
         [major_version_delta, minor_version_delta, patch_version_delta]
       end
 

@@ -84,15 +84,15 @@ module LibyearBundler
     end
 
     def calculate_grand_total
-      if report.to_h.key?(:version_sequence_delta) && report.to_h.key?(:version_number_delta)
+      if report.to_h.key?(:sum_seq_delta) && report.to_h.key?(:sum_major_version)
         [
           libyears_grand_total,
           releases_grand_total,
           versions_grand_total
         ].join("\n")
-      elsif report.to_h.key?(:version_sequence_delta)
+      elsif report.to_h.key?(:sum_seq_delta)
         releases_grand_total
-      elsif report.to_h.key?(:version_number_delta)
+      elsif report.to_h.key?(:sum_major_version)
         versions_grand_total
       else
         libyears_grand_total

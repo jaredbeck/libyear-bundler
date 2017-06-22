@@ -3,8 +3,9 @@ module LibyearBundler
   # with presentation, nothing else.
   class Report
     # `gems` - Array of hashes.
-    def initialize(gems)
+    def initialize(gems, flags)
       @gems = gems
+      @flags = flags
     end
 
     def to_s
@@ -29,21 +30,27 @@ module LibyearBundler
     private
 
     def put_gem_summary(gem)
-      puts(
-        format(
-          "%30s%15s%15s%15s%15s%10.1f [%d,%d,%d] %d",
-          gem[:name],
-          gem[:installed][:version],
-          gem[:installed][:date],
-          gem[:newest][:version],
-          gem[:newest][:date],
-          gem[:libyears],
-          gem[:version_number_delta][0],
-          gem[:version_number_delta][1],
-          gem[:version_number_delta][2],
-          gem[:version_sequence_delta]
-        )
+      meta = format(
+        "%30s%15s%15s%15s%15s",
+        gem[:name],
+        gem[:installed][:version],
+        gem[:installed][:date],
+        gem[:newest][:version],
+        gem[:newest][:date]
       )
+      libyear = format("%10.1f", gem[:libyears])
+      releases = format("%10d", gem[:version_sequence_delta])
+      versions = format("%15s", gem[:version_number_delta].to_s)
+
+      if @flags.include?("--releases")
+        puts meta << releases
+      elsif @flags.include?("--versions")
+        puts meta << versions
+      elsif @flags.include?("--all")
+        puts meta << libyear << releases << versions
+      else
+        puts meta << libyear
+      end
     end
 
     def put_libyear_summary(sum_years)
@@ -64,13 +71,25 @@ module LibyearBundler
     end
 
     def put_summary(summary)
-      put_libyear_summary(summary[:sum_years])
-      put_version_delta_summary(
-        summary[:sum_major_version],
-        summary[:sum_minor_version],
-        summary[:sum_patch_version]
-      )
-      put_sum_seq_delta_summary(summary[:sum_seq_delta])
+      if @flags.include?("--versions")
+        put_version_delta_summary(
+          summary[:sum_major_version],
+          summary[:sum_minor_version],
+          summary[:sum_patch_version]
+        )
+      elsif @flags.include?("--releases")
+        put_sum_seq_delta_summary(summary[:sum_seq_delta])
+      elsif @flags.include?("--all")
+        put_libyear_summary(summary[:sum_years])
+        put_sum_seq_delta_summary(summary[:sum_seq_delta])
+        put_version_delta_summary(
+          summary[:sum_major_version],
+          summary[:sum_minor_version],
+          summary[:sum_patch_version]
+        )
+      else
+        put_libyear_summary(summary[:sum_years])
+      end
     end
   end
 end

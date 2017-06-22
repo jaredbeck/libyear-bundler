@@ -7,7 +7,10 @@ module LibyearBundler
   # The `libyear-bundler` command line program
   class CLI
     OPTIONS = %w[
+      --all
       --grand-total
+      --releases
+      --versions
     ].freeze
 
     E_BUNDLE_OUTDATED_FAILED = 1
@@ -23,7 +26,7 @@ module LibyearBundler
       if @argv.include?("--grand-total")
         grand_total
       else
-        print Report.new(query).to_s
+        print Report.new(query, @argv).to_s
       end
     end
 

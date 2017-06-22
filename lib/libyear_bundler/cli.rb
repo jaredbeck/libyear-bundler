@@ -4,10 +4,15 @@ require "libyear_bundler/report"
 require "libyear_bundler/query"
 
 module LibyearBundler
+  # The `libyear-bundler` command line program
   class CLI
-    OPTIONS = %w(
+    OPTIONS = %w[
+      --all
       --grand-total
-    ).freeze
+      --libyears
+      --releases
+      --versions
+    ].freeze
 
     E_BUNDLE_OUTDATED_FAILED = 1
     E_NO_GEMFILE = 2
@@ -22,7 +27,7 @@ module LibyearBundler
       if @argv.include?("--grand-total")
         grand_total
       else
-        print Report.new(query).to_s
+        print report.to_s
       end
     end
 
@@ -51,7 +56,11 @@ module LibyearBundler
     end
 
     def query
-      Query.new(@gemfile_path).execute
+      Query.new(@gemfile_path, @argv).execute
+    end
+
+    def report
+      @_report ||= Report.new(query)
     end
 
     def unexpected_options
@@ -64,16 +73,46 @@ module LibyearBundler
     end
 
     def validate_arguments
-      unless unexpected_options.empty?
-        puts "Unexpected args: #{unexpected_options.join(", ")}"
-        puts "Allowed args: #{OPTIONS.join(", ")}"
-        exit E_NO_GEMFILE
-      end
+      return if unexpected_options.empty?
+      puts "Unexpected args: #{unexpected_options.join(', ')}"
+      puts "Allowed args: #{OPTIONS.join(', ')}"
+      exit E_NO_GEMFILE
     end
 
     def grand_total
-      sum_years = query.map { |gem| gem[:libyears] }.inject(0.0, :+)
-      puts format("%.1f", sum_years)
+      puts calculate_grand_total
+    end
+
+    def calculate_grand_total
+      if report.to_h.key?(:sum_seq_delta) && report.to_h.key?(:sum_major_version)
+        [
+          libyears_grand_total,
+          releases_grand_total,
+          versions_grand_total
+        ].join("\n")
+      elsif report.to_h.key?(:sum_seq_delta)
+        releases_grand_total
+      elsif report.to_h.key?(:sum_major_version)
+        versions_grand_total
+      else
+        libyears_grand_total
+      end
+    end
+
+    def libyears_grand_total
+      report.to_h[:sum_years].truncate(1)
+    end
+
+    def releases_grand_total
+      report.to_h[:sum_seq_delta]
+    end
+
+    def versions_grand_total
+      [
+        report.to_h[:sum_major_version],
+        report.to_h[:sum_minor_version],
+        report.to_h[:sum_patch_version]
+      ].to_s
     end
   end
 end

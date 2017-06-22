@@ -92,7 +92,7 @@ module LibyearBundler
     end
 
     def put_summary(summary)
-      if summary.key?(:sum_years) && summary.key?(:sum_seq_delta) && summary.key?(:sum_major_version)
+      if summary.key?(:sum_seq_delta) && summary.key?(:sum_major_version)
         put_libyear_summary(summary[:sum_years])
         put_sum_seq_delta_summary(summary[:sum_seq_delta])
         put_version_delta_summary(

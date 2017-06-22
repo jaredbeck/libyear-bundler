@@ -3,6 +3,8 @@ require 'uri'
 require 'json'
 
 module Calculators
+  # The version sequence delta is the number of releases between the newest and
+  # installed versions of the gem
   class VersionSequenceDelta
     class << self
       def calculate(gem)

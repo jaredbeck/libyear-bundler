@@ -1,5 +1,5 @@
 Metrics/AbcSize:
-  Max: 18
+  Max: 20
 
 Metrics/LineLength:
   Max: 90

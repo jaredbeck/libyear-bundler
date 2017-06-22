@@ -85,7 +85,9 @@ module LibyearBundler
                     elsif @argv.include?("--versions")
                       versions_grand_total
                     elsif @argv.include?("--all")
-                      "#{libyears_grand_total}\n#{releases_grand_total}\n#{versions_grand_total}"
+                      "#{libyears_grand_total}\n#" \
+                      "{releases_grand_total}\n#" \
+                      "{versions_grand_total}"
                     else
                       libyears_grand_total
                     end

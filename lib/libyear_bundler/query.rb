@@ -1,6 +1,7 @@
 require "English"
 require "open3"
 require 'libyear_bundler/calculators/libyear'
+require 'libyear_bundler/calculators/version_number_delta'
 
 module LibyearBundler
   # Responsible for getting all the data that goes into the `Report`.
@@ -25,6 +26,7 @@ module LibyearBundler
       end
       gems.each do |gem|
         gem[:libyears] = ::Calculators::Libyear.calculate(gem)
+        gem[:version_number_delta] = ::Calculators::VersionNumberDelta.calculate(gem)
       end
       gems
     end

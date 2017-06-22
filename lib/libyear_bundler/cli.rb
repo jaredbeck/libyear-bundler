@@ -4,10 +4,11 @@ require "libyear_bundler/report"
 require "libyear_bundler/query"
 
 module LibyearBundler
+  # The `libyear-bundler` command line program
   class CLI
-    OPTIONS = %w(
+    OPTIONS = %w[
       --grand-total
-    ).freeze
+    ].freeze
 
     E_BUNDLE_OUTDATED_FAILED = 1
     E_NO_GEMFILE = 2
@@ -64,11 +65,10 @@ module LibyearBundler
     end
 
     def validate_arguments
-      unless unexpected_options.empty?
-        puts "Unexpected args: #{unexpected_options.join(", ")}"
-        puts "Allowed args: #{OPTIONS.join(", ")}"
-        exit E_NO_GEMFILE
-      end
+      return if unexpected_options.empty?
+      puts "Unexpected args: #{unexpected_options.join(', ')}"
+      puts "Allowed args: #{OPTIONS.join(', ')}"
+      exit E_NO_GEMFILE
     end
 
     def grand_total

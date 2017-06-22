@@ -23,19 +23,7 @@ module LibyearBundler
         )
       end
       gems.each do |gem|
-        di = release_date(gem[:name], gem[:installed][:version])
-        dn = release_date(gem[:name], gem[:newest][:version])
-        gem[:installed][:date] = di
-        gem[:newest][:date] = dn
-        if di.nil? || dn.nil? || dn <= di
-          # Known issue: Backports and maintenance releases of older minor versions.
-          # Example: json 1.8.6 (2017-01-13) was released *after* 2.0.3 (2017-01-12)
-          years = 0.0
-        else
-          days = (dn - di).to_f
-          years = days / 365.0
-        end
-        gem[:libyears] = years
+        gem[:libyears] = calculate_libyear(gem)
       end
       gems
     end
@@ -44,7 +32,7 @@ module LibyearBundler
 
     def bundle_outdated
       stdout, stderr, status = Open3.capture3(
-        %Q(BUNDLE_GEMFILE="#{@gemfile_path}" bundle outdated --parseable)
+        %(BUNDLE_GEMFILE="#{@gemfile_path}" bundle outdated --parseable)
       )
       # Known statuses:
       # 0 - Nothing is outdated
@@ -58,6 +46,22 @@ module LibyearBundler
         Kernel.exit(CLI::E_BUNDLE_OUTDATED_FAILED)
       end
       stdout
+    end
+
+    def calculate_libyear(gem)
+      di = release_date(gem[:name], gem[:installed][:version])
+      dn = release_date(gem[:name], gem[:newest][:version])
+      gem[:installed][:date] = di
+      gem[:newest][:date] = dn
+      if di.nil? || dn.nil? || dn <= di
+        # Known issue: Backports and maintenance releases of older minor versions.
+        # Example: json 1.8.6 (2017-01-13) was released *after* 2.0.3 (2017-01-12)
+        years = 0.0
+      else
+        days = (dn - di).to_f
+        years = days / 365.0
+      end
+      years
     end
 
     # Known issue: Probably performs a network request every time, unless

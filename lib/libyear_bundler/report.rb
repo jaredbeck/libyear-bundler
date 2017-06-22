@@ -3,28 +3,36 @@ module LibyearBundler
   # with presentation, nothing else.
   class Report
     # `gems` - Array of hashes.
+    # `flags` - Array of command line arguments
     def initialize(gems, flags)
       @gems = gems
       @flags = flags
     end
 
     def to_s
-      summary = {
-        sum_years: 0.0,
-        sum_major_version: 0,
-        sum_minor_version: 0,
-        sum_patch_version: 0,
-        sum_seq_delta: 0
-      }
-      @gems.each do |gem|
-        summary[:sum_years] += gem[:libyears]
-        summary[:sum_major_version] += gem[:version_number_delta][0]
-        summary[:sum_minor_version] += gem[:version_number_delta][1]
-        summary[:sum_patch_version] += gem[:version_number_delta][2]
-        summary[:sum_seq_delta] += gem[:version_sequence_delta]
-        put_gem_summary(gem)
-      end
-      put_summary(summary)
+      to_h[:gems].each { |gem| put_gem_summary(gem) }
+      put_summary(to_h)
+    end
+
+    def to_h
+      @_to_h ||=
+        begin
+          summary = {
+            gems: @gems,
+            sum_years: 0.0,
+            sum_major_version: 0,
+            sum_minor_version: 0,
+            sum_patch_version: 0,
+            sum_seq_delta: 0
+          }
+          @gems.each_with_object(summary) do |gem, memo|
+            memo[:sum_years] += gem[:libyears]
+            memo[:sum_major_version] += gem[:version_number_delta][0]
+            memo[:sum_minor_version] += gem[:version_number_delta][1]
+            memo[:sum_patch_version] += gem[:version_number_delta][2]
+            memo[:sum_seq_delta] += gem[:version_sequence_delta]
+          end
+        end
     end
 
     private

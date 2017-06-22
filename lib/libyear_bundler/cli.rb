@@ -9,6 +9,7 @@ module LibyearBundler
     OPTIONS = %w[
       --all
       --grand-total
+      --libyears
       --releases
       --versions
     ].freeze
@@ -26,7 +27,7 @@ module LibyearBundler
       if @argv.include?("--grand-total")
         grand_total
       else
-        print Report.new(query, @argv).to_s
+        print report.to_s
       end
     end
 
@@ -58,6 +59,10 @@ module LibyearBundler
       Query.new(@gemfile_path).execute
     end
 
+    def report
+      @_report ||= Report.new(query, @argv)
+    end
+
     def unexpected_options
       @_unexpected_options ||= begin
         options = @argv.select { |arg| arg.start_with?("--") }
@@ -75,8 +80,33 @@ module LibyearBundler
     end
 
     def grand_total
-      sum_years = query.map { |gem| gem[:libyears] }.inject(0.0, :+)
-      puts format("%.1f", sum_years)
+      grand_total = if @argv.include?("--releases")
+                      releases_grand_total
+                    elsif @argv.include?("--versions")
+                      versions_grand_total
+                    elsif @argv.include?("--all")
+                      "#{libyears_grand_total}\n#{releases_grand_total}\n#{versions_grand_total}"
+                    else
+                      libyears_grand_total
+                    end
+
+      puts grand_total
+    end
+
+    def libyears_grand_total
+      report.to_h[:sum_years].truncate(1)
+    end
+
+    def releases_grand_total
+      report.to_h[:sum_seq_delta]
+    end
+
+    def versions_grand_total
+      [
+        report.to_h[:sum_major_version],
+        report.to_h[:sum_minor_version],
+        report.to_h[:sum_patch_version]
+      ].to_s
     end
   end
 end

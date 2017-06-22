@@ -30,17 +30,10 @@ module LibyearBundler
     private
 
     def put_gem_summary(gem)
-      meta = format(
-        "%30s%15s%15s%15s%15s",
-        gem[:name],
-        gem[:installed][:version],
-        gem[:installed][:date],
-        gem[:newest][:version],
-        gem[:newest][:date]
-      )
+      meta = meta_gem_summary(gem)
       libyear = format("%10.1f", gem[:libyears])
       releases = format("%10d", gem[:version_sequence_delta])
-      versions = format("%15s", gem[:version_number_delta].to_s)
+      versions = format("%15s", gem[:version_number_delta])
 
       if @flags.include?("--releases")
         puts meta << releases
@@ -51,6 +44,17 @@ module LibyearBundler
       else
         puts meta << libyear
       end
+    end
+
+    def meta_gem_summary(gem)
+      format(
+        "%30s%15s%15s%15s%15s",
+        gem[:name],
+        gem[:installed][:version],
+        gem[:installed][:date],
+        gem[:newest][:version],
+        gem[:newest][:date]
+      )
     end
 
     def put_libyear_summary(sum_years)

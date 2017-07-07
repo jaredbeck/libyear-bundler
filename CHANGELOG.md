@@ -17,6 +17,21 @@ Fixed:
 
 - None
 
+## 0.4.0 (2017-07-07)
+
+Breaking changes:
+
+- None
+
+Added:
+
+- [#3](https://github.com/jaredbeck/libyear-bundler/pull/3)
+  Add --versions and --releases
+
+Fixed:
+
+- None
+
 ## 0.3.0 (2017-03-24)
 
 Breaking changes:

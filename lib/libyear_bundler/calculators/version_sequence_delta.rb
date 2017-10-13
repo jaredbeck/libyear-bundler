@@ -8,6 +8,7 @@ module Calculators
   class VersionSequenceDelta
     class << self
       def calculate(gem)
+        # Versions are returned ordered by version number, descending
         versions =  gem_version_details(gem[:name]).map { |version| version["number"] }
         newest_seq = versions.index(gem[:newest][:version])
         installed_seq = versions.index(gem[:installed][:version])

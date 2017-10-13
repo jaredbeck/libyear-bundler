@@ -3,9 +3,9 @@ module Calculators
   # order version number of the installed and newest releases
   class VersionNumberDelta
     class << self
-      def calculate(gem)
-        newest_version_tuple = version_tuple(gem[:newest][:version].split('.'))
-        installed_version_tuple = version_tuple(gem[:installed][:version].split('.'))
+      def calculate(installed_version, newest_version)
+        installed_version_tuple = version_tuple(installed_version.split('.'))
+        newest_version_tuple = version_tuple(newest_version.split('.'))
         major_version_delta = version_delta(
           newest_version_tuple.major, installed_version_tuple.major
         )

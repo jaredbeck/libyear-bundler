@@ -28,7 +28,11 @@ module LibyearBundler
       end
       gems.each do |gem|
         if @argv.include?("--versions") || @argv.include?("--all")
-          gem[:version_number_delta] = ::Calculators::VersionNumberDelta.calculate(gem)
+          gem[:version_number_delta] =
+            ::Calculators::VersionNumberDelta.calculate(
+              gem[:installed][:version],
+              gem[:newest][:version]
+            )
         end
 
         if @argv.include?("--releases") || @argv.include?("--all")

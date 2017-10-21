@@ -125,9 +125,12 @@ $ libyear-bundler Gemfile --all --grand-total
 
 ## Development
 
+```ruby
+bundle install
+bundle exec rspec
 ```
-ruby -I lib bin/libyear-bundler spec/fixtures/01/Gemfile
-```
+
+Pull requests are welcome.
 
 ---
 [1] J. Cox, E. Bouwers, M. van Eekelen and J. Visser, Measuring Dependency

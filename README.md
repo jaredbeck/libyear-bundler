@@ -125,7 +125,7 @@ $ libyear-bundler Gemfile --all --grand-total
 
 ## Development
 
-```ruby
+```bash
 bundle install
 bundle exec rspec
 ```

@@ -3,6 +3,7 @@ require "open3"
 require 'libyear_bundler/calculators/libyear'
 require 'libyear_bundler/calculators/version_number_delta'
 require 'libyear_bundler/calculators/version_sequence_delta'
+require 'libyear_bundler/models/gem'
 
 module LibyearBundler
   # Responsible for getting all the data that goes into the `Report`.
@@ -20,31 +21,29 @@ module LibyearBundler
       bundle_outdated.lines.each do |line|
         match = BOP_FMT.match(line)
         next if match.nil?
-        gems.push(
-          installed: { version: match["installed"] },
-          name: match["name"],
-          newest: { version: match["newest"] }
-        )
+        gems.push(::Models::Gem.new(match))
       end
       gems.each do |gem|
         if @argv.include?("--versions") || @argv.include?("--all")
-          gem[:version_number_delta] =
+          gem.version_number_delta =
             ::Calculators::VersionNumberDelta.calculate(
-              gem[:installed][:version],
-              gem[:newest][:version]
+              gem.installed_version,
+              gem.newest_version
             )
         end
 
         if @argv.include?("--releases") || @argv.include?("--all")
-          gem[:version_sequence_delta] =
+          gem.version_sequence_delta =
             ::Calculators::VersionSequenceDelta.calculate(
-              gem[:name],
-              gem[:installed_version],
-              gem[:newest_version]
+              gem.installed_version,
+              gem.newest_version
             )
         end
 
-        gem[:libyears] = ::Calculators::Libyear.calculate(gem)
+        gem.libyears = ::Calculators::Libyear.calculate(
+          gem.installed_version_release_date,
+          gem.newest_version_release_date
+        )
       end
       gems
     end

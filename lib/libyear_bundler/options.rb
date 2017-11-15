@@ -4,12 +4,16 @@ require 'libyear_bundler/version'
 module LibyearBundler
   # Uses OptionParser from Ruby's stdlib to hand command-line arguments
   class Options
+    BANNER = <<-BANNER
+Usage: libyear-bundler [Gemfile ...] [options]
+https://github.com/jaredbeck/libyear-bundler/
+    BANNER
+
     def initialize(argv)
       @argv = argv
       @options = {}
       @optparser = OptionParser.new do |opts|
-        opts.banner = "Usage: libyear-bundler [Gemfile ...] [options]\n" \
-          'https://github.com/jaredbeck/libyear-bundler/'
+        opts.banner = BANNER
         opts.default_argv = '--libyears'
         opts.program_name = 'libyear-bundler'
         opts.version = ::LibyearBundler::VERSION

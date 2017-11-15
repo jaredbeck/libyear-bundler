@@ -5,7 +5,7 @@ module LibyearBundler
     it 'sets instance vars' do
       opts = described_class.new([])
       expect(opts.instance_variable_get(:@argv)).to eq([])
-      expect(opts.instance_variable_get(:@options)).to eq({})
+      expect(opts.instance_variable_get(:@options)).to be_a(::OpenStruct)
       expect(opts.instance_variable_get(:@optparser)).to be_a(::OptionParser)
     end
 

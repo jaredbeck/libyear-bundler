@@ -19,7 +19,7 @@ module LibyearBundler
     end
 
     def run
-      if @options[:grand_total?]
+      if @options.grand_total?
         grand_total
       else
         print report.to_s
@@ -69,9 +69,9 @@ module LibyearBundler
           releases_grand_total,
           versions_grand_total
         ].join("\n")
-      elsif @options[:releases?]
+      elsif @options.releases?
         releases_grand_total
-      elsif @options[:versions?]
+      elsif @options.versions?
         versions_grand_total
       else
         libyears_grand_total

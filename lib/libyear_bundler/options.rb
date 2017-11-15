@@ -13,7 +13,7 @@ https://github.com/jaredbeck/libyear-bundler/
 
     def initialize(argv)
       @argv = argv
-      @options = {}
+      @options = ::OpenStruct.new
       @optparser = OptionParser.new do |opts|
         opts.banner = BANNER
         opts.default_argv = '--libyears'
@@ -26,25 +26,25 @@ https://github.com/jaredbeck/libyear-bundler/
         end
 
         opts.on('--all', 'Calculate all metrics') do
-          @options[:libyears?] = true
-          @options[:releases?] = true
-          @options[:versions?] = true
+          @options.send('libyears?=', true)
+          @options.send('releases?=', true)
+          @options.send('versions?=', true)
         end
 
         opts.on('--libyears', '[default] Calculate libyears out-of-date') do
-          @options[:libyears?] = true
+          @options.send('libyears?=', true)
         end
 
         opts.on('--releases', 'Calculate number of releases out-of-date') do
-          @options[:releases?] = true
+          @options.send('releases?=', true)
         end
 
         opts.on('--versions', 'Calculate major, minor, and patch versions out-of-date') do
-          @options[:versions?] = true
+          @options.send('versions?=', true)
         end
 
         opts.on('--grand-total', 'Return value for given metric(s)') do
-          @options[:grand_total?] = true
+          @options.send('grand_total?=', true)
         end
       end
     end
@@ -55,7 +55,7 @@ https://github.com/jaredbeck/libyear-bundler/
     rescue OptionParser::InvalidOption => e
       warn e
       warn @optparser.help
-      exit ::LibyearBundler::E_INVALID_CLI_ARG
+      exit ::LibyearBundler::CLI::E_INVALID_CLI_ARG
     end
   end
 end

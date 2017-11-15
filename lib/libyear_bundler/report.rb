@@ -27,7 +27,7 @@ module LibyearBundler
           @gems.each_with_object(summary) do |gem, memo|
             memo[:sum_years] += gem.libyears
 
-            if @options[:versions?]
+            if @options.versions?
               memo[:sum_major_version] ||= 0
               memo[:sum_major_version] += gem.version_number_delta[0]
               memo[:sum_minor_version] ||= 0
@@ -36,7 +36,7 @@ module LibyearBundler
               memo[:sum_patch_version] += gem.version_number_delta[2]
             end
 
-            if @options[:releases?]
+            if @options.releases?
               memo[:sum_seq_delta] ||= 0
               memo[:sum_seq_delta] += gem.version_sequence_delta
             end
@@ -49,17 +49,17 @@ module LibyearBundler
     def put_gem_summary(gem)
       meta = meta_gem_summary(gem)
 
-      if @options[:releases?]
+      if @options.releases?
         releases = format(FMT_RELEASES_COLUMN, gem.version_sequence_delta)
         meta << releases
       end
 
-      if @options[:versions?]
+      if @options.versions?
         versions = format(FMT_VERSIONS_COLUMN, gem.version_number_delta)
         meta << versions
       end
 
-      if @options[:libyears?]
+      if @options.libyears?
         libyears = format(FMT_LIBYEARS_COLUMN, gem.libyears)
         meta << libyears
       end
@@ -104,13 +104,13 @@ module LibyearBundler
           summary[:sum_minor_version],
           summary[:sum_patch_version]
         )
-      elsif @options[:versions?]
+      elsif @options.versions?
         put_version_delta_summary(
           summary[:sum_major_version],
           summary[:sum_minor_version],
           summary[:sum_patch_version]
         )
-      elsif @options[:releases?]
+      elsif @options.releases?
         put_sum_seq_delta_summary(summary[:sum_seq_delta])
       else
         put_libyear_summary(summary[:sum_years])

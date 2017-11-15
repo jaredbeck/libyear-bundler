@@ -12,7 +12,6 @@ module LibyearBundler
     context 'invalid option' do
       it 'prints the help' do
         opts = described_class.new(['--black-flag'])
-        optparser = opts.instance_variable_get(:@optparser)
         expect { opts.parse! }
           .to raise_error(::SystemExit)
           .and(output.to_stderr)

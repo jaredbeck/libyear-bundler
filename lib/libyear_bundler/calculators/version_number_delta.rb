@@ -5,8 +5,8 @@ module LibyearBundler
     class VersionNumberDelta
       class << self
         def calculate(installed_version, newest_version)
-          installed_version_tuple = version_tuple(installed_version.split('.'))
-          newest_version_tuple = version_tuple(newest_version.split('.'))
+          installed_version_tuple = version_tuple(installed_version.to_s.split('.'))
+          newest_version_tuple = version_tuple(newest_version.to_s.split('.'))
           major_version_delta = version_delta(
             newest_version_tuple.major, installed_version_tuple.major
           )

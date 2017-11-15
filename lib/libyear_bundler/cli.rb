@@ -56,15 +56,6 @@ module LibyearBundler
       @_report ||= Report.new(query, @options)
     end
 
-    def unexpected_options
-      @_unexpected_options ||= begin
-        options = @options.select { |arg| arg.start_with?("--") }
-        options.each_with_object([]) do |arg, memo|
-          memo << arg unless OPTIONS.include?(arg)
-        end
-      end
-    end
-
     def grand_total
       puts calculate_grand_total
     end

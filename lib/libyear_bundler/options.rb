@@ -49,7 +49,7 @@ module LibyearBundler
     rescue OptionParser::InvalidOption => e
       warn e
       warn @optparser.help
-      exit 1
+      exit ::LibyearBundler::E_INVALID_CLI_ARG
     end
   end
 end

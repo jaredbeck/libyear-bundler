@@ -9,6 +9,7 @@ module LibyearBundler
   class CLI
     E_BUNDLE_OUTDATED_FAILED = 1
     E_NO_GEMFILE = 2
+    E_INVALID_CLI_ARG = 3
 
     def initialize(argv)
       @options = ::LibyearBundler::Options.new(argv).parse!

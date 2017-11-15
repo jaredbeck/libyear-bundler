@@ -11,9 +11,8 @@ module LibyearBundler
     # Format of `bundle outdated --parseable` (BOP)
     BOP_FMT = /\A(?<name>[^ ]+) \(newest (?<newest>[^,]+), installed (?<installed>[^,)]+)/
 
-    def initialize(gemfile_path, argv)
+    def initialize(gemfile_path)
       @gemfile_path = gemfile_path
-      @argv = argv
     end
 
     def execute

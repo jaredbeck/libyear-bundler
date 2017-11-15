@@ -5,10 +5,6 @@ require 'json'
 module LibyearBundler
   module Models
     class Gem
-      attr_accessor :libyears,
-        :version_number_delta, # returns [major, minor, patch]
-        :version_sequence_delta
-
       def initialize(match)
         @match = match
       end
@@ -25,6 +21,13 @@ module LibyearBundler
         versions_sequence.index(installed_version.to_s)
       end
 
+      def libyears
+        ::LibyearBundler::Calculators::Libyear.calculate(
+          installed_version_release_date,
+          newest_version_release_date
+        )
+      end
+
       def name
         @match['name']
       end
@@ -39,6 +42,20 @@ module LibyearBundler
 
       def newest_version_release_date
         release_date(name, newest_version)
+      end
+
+      def version_number_delta
+        ::LibyearBundler::Calculators::VersionNumberDelta.calculate(
+          installed_version,
+          newest_version
+        )
+      end
+
+      def version_sequence_delta
+        ::LibyearBundler::Calculators::VersionSequenceDelta(
+          installed_version_sequence_index,
+          newest_version_sequence_index
+        )
       end
 
       private

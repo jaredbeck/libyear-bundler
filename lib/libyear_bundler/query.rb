@@ -20,7 +20,12 @@ module LibyearBundler
       bundle_outdated.lines.each do |line|
         match = BOP_FMT.match(line)
         next if match.nil?
-        gems.push(::Models::Gem.new(match))
+        gem = ::LibyearBundler::Models::Gem.new(
+          match['name'],
+          match['installed_version'],
+          match['newest_version']
+        )
+        gems.push(gem)
       end
       gems.each do |gem|
         if @argv.include?("--versions") || @argv.include?("--all")

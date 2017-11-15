@@ -5,12 +5,14 @@ require 'json'
 module LibyearBundler
   module Models
     class Gem
-      def initialize(match)
-        @match = match
+      def initialize(name, installed_version, newest_version)
+        @name = name
+        @installed_version = installed_version
+        @newest_version = newest_version
       end
 
       def installed_version
-        ::Gem::Version.new(@match['installed'])
+        ::Gem::Version.new(@installed_version)
       end
 
       def installed_version_release_date
@@ -29,11 +31,11 @@ module LibyearBundler
       end
 
       def name
-        @match['name']
+        @name
       end
 
       def newest_version
-        ::Gem::Version.new(@match['newest'])
+        ::Gem::Version.new(@newest_version)
       end
 
       def newest_version_sequence_index

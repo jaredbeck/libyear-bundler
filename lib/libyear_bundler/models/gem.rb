@@ -52,7 +52,7 @@ module LibyearBundler
       end
 
       def version_sequence_delta
-        ::LibyearBundler::Calculators::VersionSequenceDelta(
+        ::LibyearBundler::Calculators::VersionSequenceDelta.calculate(
           installed_version_sequence_index,
           newest_version_sequence_index
         )

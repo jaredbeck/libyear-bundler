@@ -1,8 +1,9 @@
 require "bundler/cli"
 require "bundler/cli/outdated"
-require "libyear_bundler/report"
-require "libyear_bundler/query"
 require "libyear_bundler/options"
+require "libyear_bundler/query"
+require "libyear_bundler/report"
+
 
 module LibyearBundler
   # The `libyear-bundler` command line program

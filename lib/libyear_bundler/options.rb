@@ -1,5 +1,7 @@
 require 'optparse'
 require 'libyear_bundler/version'
+require "libyear_bundler/cli"
+require 'ostruct'
 
 module LibyearBundler
   # Uses OptionParser from Ruby's stdlib to hand command-line arguments

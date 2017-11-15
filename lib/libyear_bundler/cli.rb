@@ -14,7 +14,9 @@ module LibyearBundler
 
     def initialize(argv)
       @options = ::LibyearBundler::Options.new(argv).parse
-      @argv = argv # `parse_argv` removes non-flag options, leaving e.g. a Gemfile path
+      # Command line flags are removed in `Options` by `OptionParser`, leaving
+      # non-flag command line arguments, such as a Gemfile path
+      @argv = argv
       @gemfile_path = load_gemfile_path
     end
 

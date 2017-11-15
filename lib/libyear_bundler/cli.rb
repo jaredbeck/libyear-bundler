@@ -44,7 +44,7 @@ module LibyearBundler
         '' # `bundle outdated` will default to local Gemfile
       else
         $stderr.puts "Gemfile not found"
-        exit
+        exit E_NO_GEMFILE
       end
     end
 

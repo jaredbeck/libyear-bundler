@@ -49,7 +49,7 @@ https://github.com/jaredbeck/libyear-bundler/
       end
     end
 
-    def parse!
+    def parse
       @optparser.parse!(@argv)
       @options
     rescue OptionParser::InvalidOption => e

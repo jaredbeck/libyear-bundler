@@ -13,7 +13,7 @@ module LibyearBundler
     E_INVALID_CLI_ARG = 3
 
     def initialize(argv)
-      @options = ::LibyearBundler::Options.new(argv).parse!
+      @options = ::LibyearBundler::Options.new(argv).parse
       @argv = argv # `parse_argv` removes non-flag options, leaving e.g. a Gemfile path
       @gemfile_path = load_gemfile_path
     end

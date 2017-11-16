@@ -6,8 +6,9 @@ module LibyearBundler
     FMT_VERSIONS_COLUMN = "%15s".freeze
 
     # `gems` - Array of hashes.
-    def initialize(gems)
+    def initialize(gems, argv)
       @gems = gems
+      @argv = argv
     end
 
     def to_s
@@ -23,20 +24,20 @@ module LibyearBundler
             sum_years: 0.0
           }
           @gems.each_with_object(summary) do |gem, memo|
-            memo[:sum_years] += gem[:libyears]
+            memo[:sum_years] += gem.libyears
 
-            if gem.key?(:version_number_delta)
+            if @argv.include?("--versions") || @argv.include?("--all")
               memo[:sum_major_version] ||= 0
-              memo[:sum_major_version] += gem[:version_number_delta][0]
+              memo[:sum_major_version] += gem.version_number_delta[0]
               memo[:sum_minor_version] ||= 0
-              memo[:sum_minor_version] += gem[:version_number_delta][1]
+              memo[:sum_minor_version] += gem.version_number_delta[1]
               memo[:sum_patch_version] ||= 0
-              memo[:sum_patch_version] += gem[:version_number_delta][2]
+              memo[:sum_patch_version] += gem.version_number_delta[2]
             end
 
-            if gem.key?(:version_sequence_delta)
+            if @argv.include?("--releases") || @argv.include?("--all")
               memo[:sum_seq_delta] ||= 0
-              memo[:sum_seq_delta] += gem[:version_sequence_delta]
+              memo[:sum_seq_delta] += gem.version_sequence_delta
             end
           end
         end
@@ -46,17 +47,17 @@ module LibyearBundler
 
     def put_gem_summary(gem)
       meta = meta_gem_summary(gem)
-      libyear = format("%10.1f", gem[:libyears])
+      libyear = format("%10.1f", gem.libyears)
 
-      if gem.key?(:version_sequence_delta) && gem.key?(:version_number_delta)
-        releases = format(FMT_RELEASES_COLUMN, gem[:version_sequence_delta])
-        versions = format(FMT_VERSIONS_COLUMN, gem[:version_number_delta])
+      if (@argv.include?("--releases") && @argv.include?("--versions")) || @argv.include?("--all")
+        releases = format(FMT_RELEASES_COLUMN, gem.version_sequence_delta)
+        versions = format(FMT_VERSIONS_COLUMN, gem.version_number_delta)
         puts meta << libyear << releases << versions
-      elsif gem.key?(:version_sequence_delta)
-        releases = format(FMT_RELEASES_COLUMN, gem[:version_sequence_delta])
+      elsif @argv.include?("--releases")
+        releases = format(FMT_RELEASES_COLUMN, gem.version_sequence_delta)
         puts meta << releases
-      elsif gem.key?(:version_number_delta)
-        versions = format(FMT_VERSIONS_COLUMN, gem[:version_number_delta])
+      elsif @argv.include?("--versions")
+        versions = format(FMT_VERSIONS_COLUMN, gem.version_number_delta)
         puts meta << versions
       else
         puts meta << libyear
@@ -66,11 +67,11 @@ module LibyearBundler
     def meta_gem_summary(gem)
       format(
         "%30s%15s%15s%15s%15s",
-        gem[:name],
-        gem[:installed][:version],
-        gem[:installed][:date],
-        gem[:newest][:version],
-        gem[:newest][:date]
+        gem.name,
+        gem.installed_version.to_s,
+        gem.installed_version_release_date,
+        gem.newest_version.to_s,
+        gem.newest_version_release_date
       )
     end
 

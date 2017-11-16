@@ -56,11 +56,11 @@ module LibyearBundler
     end
 
     def query
-      Query.new(@gemfile_path, @argv).execute
+      Query.new(@gemfile_path).execute
     end
 
     def report
-      @_report ||= Report.new(query)
+      @_report ||= Report.new(query, @argv)
     end
 
     def unexpected_options

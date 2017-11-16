@@ -7,7 +7,7 @@ require 'libyear_bundler/models/gem'
 
 module LibyearBundler
   # Responsible for getting all the data that goes into the `Report`.
-  class Query
+  class BundleOutdated
     # Format of `bundle outdated --parseable` (BOP)
     BOP_FMT = /\A(?<name>[^ ]+) \(newest (?<newest>[^,]+), installed (?<installed>[^,)]+)/
 

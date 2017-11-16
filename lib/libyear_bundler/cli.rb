@@ -1,7 +1,7 @@
 require "bundler/cli"
 require "bundler/cli/outdated"
+require "libyear_bundler/bundle_outdated"
 require "libyear_bundler/options"
-require "libyear_bundler/query"
 require "libyear_bundler/report"
 
 
@@ -54,7 +54,7 @@ module LibyearBundler
     end
 
     def query
-      Query.new(@gemfile_path).execute
+      BundleOutdated.new(@gemfile_path).execute
     end
 
     def report

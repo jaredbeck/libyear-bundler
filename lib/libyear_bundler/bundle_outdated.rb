@@ -21,8 +21,8 @@ module LibyearBundler
         next if match.nil?
         gem = ::LibyearBundler::Models::Gem.new(
           match['name'],
-          match['installed_version'],
-          match['newest_version']
+          match['installed'],
+          match['newest']
         )
         gems.push(gem)
       end

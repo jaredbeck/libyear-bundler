@@ -1,6 +1,6 @@
 module LibyearBundler
-  # Responsible presenting data from the `Query`. Should only be concerned
-  # with presentation, nothing else.
+  # Responsible presenting data from the `::LibyearBundler::Models`. Should only
+  # be concerned with presentation, nothing else.
   class Report
     FMT_LIBYEARS_COLUMN = "%10.1f".freeze
     FMT_RELEASES_COLUMN = "%10d".freeze

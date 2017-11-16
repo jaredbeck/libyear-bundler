@@ -5,6 +5,7 @@ module LibyearBundler
     FMT_LIBYEARS_COLUMN = "%10.1f".freeze
     FMT_RELEASES_COLUMN = "%10d".freeze
     FMT_VERSIONS_COLUMN = "%15s".freeze
+    FMT_SUMMARY_COLUMNS = "%30s%15s%15s%15s%15s".freeze
 
     # `gems` - Array of hashes.
     def initialize(gems, options)
@@ -69,7 +70,7 @@ module LibyearBundler
 
     def meta_gem_summary(gem)
       format(
-        "%30s%15s%15s%15s%15s",
+        FMT_SUMMARY_COLUMNS,
         gem.name,
         gem.installed_version.to_s,
         gem.installed_version_release_date,

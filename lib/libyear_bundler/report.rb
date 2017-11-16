@@ -9,13 +9,14 @@ module LibyearBundler
 
     # `gems` - Array of `::LibyearBundler::Models::Gem` instances
     # `options` - Instance of `::LibyearBundler::Options`
-    def initialize(gems, options)
+    def initialize(gems, ruby, options)
       @gems = gems
       @options = options
     end
 
     def to_s
-      to_h[:gems].each { |gem| put_gem_summary(gem) }
+      to_h[:gems].each { |gem| put_line_summary(gem) }
+      put_line_summar(@ruby)
       put_summary(to_h)
     end
 
@@ -48,35 +49,35 @@ module LibyearBundler
 
     private
 
-    def put_gem_summary(gem)
-      meta = meta_gem_summary(gem)
+    def put_line_summary(gem_or_ruby)
+      meta = meta_line_summary(gem_or_ruby)
 
       if @options.releases?
-        releases = format(FMT_RELEASES_COLUMN, gem.version_sequence_delta)
+        releases = format(FMT_RELEASES_COLUMN, gem_or_ruby.version_sequence_delta)
         meta << releases
       end
 
       if @options.versions?
-        versions = format(FMT_VERSIONS_COLUMN, gem.version_number_delta)
+        versions = format(FMT_VERSIONS_COLUMN, gem_or_ruby.version_number_delta)
         meta << versions
       end
 
       if @options.libyears?
-        libyears = format(FMT_LIBYEARS_COLUMN, gem.libyears)
+        libyears = format(FMT_LIBYEARS_COLUMN, gem_or_ruby.libyears)
         meta << libyears
       end
 
       puts meta
     end
 
-    def meta_gem_summary(gem)
+    def meta_line_summary(gem_or_ruby)
       format(
         FMT_SUMMARY_COLUMNS,
-        gem.name,
-        gem.installed_version.to_s,
-        gem.installed_version_release_date,
-        gem.newest_version.to_s,
-        gem.newest_version_release_date
+        gem_or_ruby.name,
+        gem_or_ruby.installed_version.to_s,
+        gem_or_ruby.installed_version_release_date,
+        gem_or_ruby.newest_version.to_s,
+        gem_or_ruby.newest_version_release_date
       )
     end
 

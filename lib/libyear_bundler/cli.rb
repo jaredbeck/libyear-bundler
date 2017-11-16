@@ -53,12 +53,12 @@ module LibyearBundler
       end
     end
 
-    def query
+    def bundle_outdated
       BundleOutdated.new(@gemfile_path).execute
     end
 
     def report
-      @_report ||= Report.new(query, @options)
+      @_report ||= Report.new(bundle_outdated, @options)
     end
 
     def grand_total

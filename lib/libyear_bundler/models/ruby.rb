@@ -29,6 +29,10 @@ module LibyearBundler
         )
       end
 
+      def name
+        'ruby'
+      end
+
       # We'll only consider non-prerelease versions when determining the
       # newest version
       def newest_version

@@ -7,7 +7,7 @@ require 'libyear_bundler/models/gem'
 
 module LibyearBundler
   # Responsible for getting all the data that goes into the `Report`.
-  class Query
+  class BundleOutdated
     # Format of `bundle outdated --parseable` (BOP)
     BOP_FMT = /\A(?<name>[^ ]+) \(newest (?<newest>[^,]+), installed (?<installed>[^,)]+)/
 
@@ -16,8 +16,7 @@ module LibyearBundler
     end
 
     def execute
-      gems = []
-      bundle_outdated.lines.each do |line|
+      bundle_outdated.lines.each_with_object([]) do |line, gems|
         match = BOP_FMT.match(line)
         next if match.nil?
         gem = ::LibyearBundler::Models::Gem.new(
@@ -27,29 +26,6 @@ module LibyearBundler
         )
         gems.push(gem)
       end
-      gems.each do |gem|
-        if @argv.include?("--versions") || @argv.include?("--all")
-          gem.version_number_delta =
-            ::Calculators::VersionNumberDelta.calculate(
-              gem.installed_version,
-              gem.newest_version
-            )
-        end
-
-        if @argv.include?("--releases") || @argv.include?("--all")
-          gem.version_sequence_delta =
-            ::Calculators::VersionSequenceDelta.calculate(
-              gem.installed_version,
-              gem.newest_version
-            )
-        end
-
-        gem.libyears = ::Calculators::Libyear.calculate(
-          gem.installed_version_release_date,
-          gem.newest_version_release_date
-        )
-      end
-      gems
     end
 
     private

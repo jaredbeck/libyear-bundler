@@ -1,30 +1,28 @@
 require "bundler/cli"
 require "bundler/cli/outdated"
+require "libyear_bundler/bundle_outdated"
+require "libyear_bundler/options"
 require "libyear_bundler/report"
-require "libyear_bundler/query"
+
 
 module LibyearBundler
   # The `libyear-bundler` command line program
   class CLI
-    OPTIONS = %w[
-      --all
-      --grand-total
-      --libyears
-      --releases
-      --versions
-    ].freeze
-
     E_BUNDLE_OUTDATED_FAILED = 1
     E_NO_GEMFILE = 2
+    E_INVALID_CLI_ARG = 3
 
     def initialize(argv)
+      @options = ::LibyearBundler::Options.new(argv).parse
+      # Command line flags are removed form `argv` in `Options` by
+      # `OptionParser`, leaving non-flag command line arguments,
+      # such as a Gemfile path
       @argv = argv
       @gemfile_path = load_gemfile_path
-      validate_arguments
     end
 
     def run
-      if @argv.include?("--grand-total")
+      if @options.grand_total?
         grand_total
       else
         print report.to_s
@@ -51,32 +49,16 @@ module LibyearBundler
         '' # `bundle outdated` will default to local Gemfile
       else
         $stderr.puts "Gemfile not found"
-        exit
+        exit E_NO_GEMFILE
       end
     end
 
     def query
-      Query.new(@gemfile_path).execute
+      BundleOutdated.new(@gemfile_path).execute
     end
 
     def report
-      @_report ||= Report.new(query, @argv)
-    end
-
-    def unexpected_options
-      @_unexpected_options ||= begin
-        options = @argv.select { |arg| arg.start_with?("--") }
-        options.each_with_object([]) do |arg, memo|
-          memo << arg unless OPTIONS.include?(arg)
-        end
-      end
-    end
-
-    def validate_arguments
-      return if unexpected_options.empty?
-      puts "Unexpected args: #{unexpected_options.join(', ')}"
-      puts "Allowed args: #{OPTIONS.join(', ')}"
-      exit E_NO_GEMFILE
+      @_report ||= Report.new(query, @options)
     end
 
     def grand_total
@@ -84,15 +66,15 @@ module LibyearBundler
     end
 
     def calculate_grand_total
-      if report.to_h.key?(:sum_seq_delta) && report.to_h.key?(:sum_major_version)
+      if [:libyears?, :releases?, :versions?].all? { |opt| @options[opt] }
         [
           libyears_grand_total,
           releases_grand_total,
           versions_grand_total
         ].join("\n")
-      elsif report.to_h.key?(:sum_seq_delta)
+      elsif @options.releases?
         releases_grand_total
-      elsif report.to_h.key?(:sum_major_version)
+      elsif @options.versions?
         versions_grand_total
       else
         libyears_grand_total

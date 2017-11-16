@@ -7,7 +7,7 @@ module LibyearBundler
     FMT_VERSIONS_COLUMN = "%15s".freeze
     FMT_SUMMARY_COLUMNS = "%30s%15s%15s%15s%15s".freeze
 
-    # `gems` - Array of hashes.
+    # `gems` - Array of `::LibyearBundler::Models::Gem` instances
     def initialize(gems, options)
       @gems = gems
       @options = options

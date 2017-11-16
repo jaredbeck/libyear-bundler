@@ -16,9 +16,9 @@ https://github.com/jaredbeck/libyear-bundler/
       @options = ::OpenStruct.new
       @optparser = OptionParser.new do |opts|
         opts.banner = BANNER
-        opts.default_argv = ['--libyears']
         opts.program_name = 'libyear-bundler'
         opts.version = ::LibyearBundler::VERSION
+        @options.send('libyears?=', true)
 
         opts.on_head('-h', '--help', 'Prints this help') do
           puts opts
@@ -36,10 +36,12 @@ https://github.com/jaredbeck/libyear-bundler/
         end
 
         opts.on('--releases', 'Calculate number of releases out-of-date') do
+          @options.send('libyears?=', false)
           @options.send('releases?=', true)
         end
 
         opts.on('--versions', 'Calculate major, minor, and patch versions out-of-date') do
+          @options.send('libyears?=', false)
           @options.send('versions?=', true)
         end
 

@@ -16,7 +16,7 @@ https://github.com/jaredbeck/libyear-bundler/
       @options = ::OpenStruct.new
       @optparser = OptionParser.new do |opts|
         opts.banner = BANNER
-        opts.default_argv = '--libyears'
+        opts.default_argv = ['--libyears']
         opts.program_name = 'libyear-bundler'
         opts.version = ::LibyearBundler::VERSION
 

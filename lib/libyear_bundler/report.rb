@@ -11,12 +11,13 @@ module LibyearBundler
     # `options` - Instance of `::LibyearBundler::Options`
     def initialize(gems, ruby, options)
       @gems = gems
+      @ruby = ruby
       @options = options
     end
 
     def to_s
       to_h[:gems].each { |gem| put_line_summary(gem) }
-      put_line_summar(@ruby)
+      put_line_summary(@ruby) if @ruby.outdated?
       put_summary(to_h)
     end
 
@@ -25,24 +26,12 @@ module LibyearBundler
         begin
           summary = {
             gems: @gems,
-            sum_years: 0.0
+            sum_libyears: 0.0
           }
           @gems.each_with_object(summary) do |gem, memo|
-            memo[:sum_years] += gem.libyears if @options.libyears?
-
-            if @options.versions?
-              memo[:sum_major_version] ||= 0
-              memo[:sum_major_version] += gem.version_number_delta[0]
-              memo[:sum_minor_version] ||= 0
-              memo[:sum_minor_version] += gem.version_number_delta[1]
-              memo[:sum_patch_version] ||= 0
-              memo[:sum_patch_version] += gem.version_number_delta[2]
-            end
-
-            if @options.releases?
-              memo[:sum_seq_delta] ||= 0
-              memo[:sum_seq_delta] += gem.version_sequence_delta
-            end
+            sum_libyears(gem, memo) if @options.libyears?
+            sum_version_deltas(gem, memo) if @options.versions?
+            sum_seq_deltas(gem, memo) if @options.releases?
           end
         end
     end
@@ -81,8 +70,8 @@ module LibyearBundler
       )
     end
 
-    def put_libyear_summary(sum_years)
-      puts format("System is %.1f libyears behind", sum_years)
+    def put_libyear_summary(sum_libyears)
+      puts format("System is %.1f libyears behind", sum_libyears)
     end
 
     def put_version_delta_summary(sum_major_version, sum_minor_version, sum_patch_version)
@@ -116,7 +105,34 @@ module LibyearBundler
       elsif @options.releases?
         put_sum_seq_delta_summary(summary[:sum_seq_delta])
       elsif @options.libyears?
-        put_libyear_summary(summary[:sum_years])
+        put_libyear_summary(summary[:sum_libyears])
+      end
+    end
+
+    def sum_libyears(gem, memo)
+      memo[:sum_libyears] += gem.libyears
+      memo[:sum_libyears] += @ruby.libyears if @ruby.outdated?
+    end
+
+    def sum_seq_deltas(gem, memo)
+      memo[:sum_seq_delta] ||= 0
+      memo[:sum_seq_delta] += gem.version_sequence_delta
+
+      memo[:sum_seq_delta] += @ruby.version_sequence_delta if @ruby.outdated?
+    end
+
+    def sum_version_deltas(gem, memo)
+      memo[:sum_major_version] ||= 0
+      memo[:sum_major_version] += gem.version_number_delta[0]
+      memo[:sum_minor_version] ||= 0
+      memo[:sum_minor_version] += gem.version_number_delta[1]
+      memo[:sum_patch_version] ||= 0
+      memo[:sum_patch_version] += gem.version_number_delta[2]
+
+      if @ruby.outdated?
+        memo[:sum_major_version] += @ruby.version_number_delta[0]
+        memo[:sum_minor_version] += @ruby.version_number_delta[1]
+        memo[:sum_patch_version] += @ruby.version_number_delta[2]
       end
     end
   end

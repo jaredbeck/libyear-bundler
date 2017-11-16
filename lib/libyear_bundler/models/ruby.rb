@@ -22,6 +22,10 @@ module LibyearBundler
         end
       end
 
+      def installed_version_release_date
+        release_date(installed_version.to_s)
+      end
+
       def libyears
         ::LibyearBundler::Calculators::Libyear.calculate(
           release_date(installed_version.to_s),
@@ -40,6 +44,14 @@ module LibyearBundler
           !::Gem::Version.new(version['version']).prerelease?
         end
         ::Gem::Version.new(newest['version'])
+      end
+
+      def newest_version_release_date
+        release_date(newest_version.to_s)
+      end
+
+      def outdated?
+        installed_version != newest_version
       end
 
       def version_number_delta
@@ -78,10 +90,6 @@ module LibyearBundler
 
       def installed_version_sequence_index
         versions_sequence.index(installed_version.to_s)
-      end
-
-      def newest_version_release_date
-        release_date(newest_version.to_s)
       end
 
       def newest_version_sequence_index

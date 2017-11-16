@@ -25,7 +25,7 @@ module LibyearBundler
             sum_years: 0.0
           }
           @gems.each_with_object(summary) do |gem, memo|
-            memo[:sum_years] += gem.libyears
+            memo[:sum_years] += gem.libyears if @options.libyears?
 
             if @options.versions?
               memo[:sum_major_version] ||= 0
@@ -96,7 +96,7 @@ module LibyearBundler
     end
 
     def put_summary(summary)
-      if [:libyears?, :releases?, :versions?].all? { |opt| @options[opt] }
+      if [:libyears?, :releases?, :versions?].all? { |opt| @options.send(opt) }
         put_libyear_summary(summary[:sum_years])
         put_sum_seq_delta_summary(summary[:sum_seq_delta])
         put_version_delta_summary(
@@ -112,7 +112,7 @@ module LibyearBundler
         )
       elsif @options.releases?
         put_sum_seq_delta_summary(summary[:sum_seq_delta])
-      else
+      elsif @options.libyears?
         put_libyear_summary(summary[:sum_years])
       end
     end

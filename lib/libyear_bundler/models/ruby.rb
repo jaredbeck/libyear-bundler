@@ -113,7 +113,7 @@ module LibyearBundler
         ruby_version_string = ::Bundler::LockfileParser.new(@lockfile).ruby_version
         return if ruby_version_string.nil?
 
-        ::Bundler::RubyVersion.from_string(ruby_version_string).gem_version.release
+        ::Bundler::RubyVersion.from_string(ruby_version_string).gem_version
       end
 
       def version_from_ruby_version_file
@@ -122,7 +122,7 @@ module LibyearBundler
       end
 
       def version_from_ruby
-        ::Gem::Version.new(shell_out_to_ruby).release
+        ::Gem::Version.new(shell_out_to_ruby)
       end
 
       def versions_sequence

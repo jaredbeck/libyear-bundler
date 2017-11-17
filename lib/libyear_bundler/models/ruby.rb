@@ -18,7 +18,9 @@ module LibyearBundler
 
       def installed_version
         @_installed_version ||= begin
-          version_from_bundler || version_from_rbenv || version_from_ruby
+          version_from_bundler ||
+            version_from_ruby_version_file ||
+            version_from_ruby
         end
       end
 
@@ -103,10 +105,6 @@ module LibyearBundler
         v['date']
       end
 
-      def shell_out_to_rbenv
-        'rbenv version-name'
-      end
-
       def shell_out_to_ruby
         `ruby --version`.split[1]
       end
@@ -118,9 +116,9 @@ module LibyearBundler
         ::Bundler::RubyVersion.from_string(ruby_version_string).gem_version.release
       end
 
-      def version_from_rbenv
-        stdout, _stderr, status = ::Open3.capture3(shell_out_to_rbenv)
-        ::Gem::Version.new(stdout).release if status.success?
+      def version_from_ruby_version_file
+        return unless ::File.exist?('.ruby-version')
+        ::Gem::Version.new(::File.read('.ruby-version'))
       end
 
       def version_from_ruby

@@ -51,7 +51,7 @@ module LibyearBundler
       end
 
       def outdated?
-        installed_version != newest_version
+        installed_version < newest_version
       end
 
       def version_number_delta

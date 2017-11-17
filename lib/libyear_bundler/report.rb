@@ -33,6 +33,10 @@ module LibyearBundler
             sum_version_deltas(gem, memo) if @options.versions?
             sum_seq_deltas(gem, memo) if @options.releases?
           end
+
+          sum_ruby(summary) if @ruby.outdated?
+
+          summary
         end
     end
 
@@ -111,14 +115,23 @@ module LibyearBundler
 
     def sum_libyears(gem, memo)
       memo[:sum_libyears] += gem.libyears
-      memo[:sum_libyears] += @ruby.libyears if @ruby.outdated?
+    end
+
+    def sum_ruby(memo)
+      memo[:sum_libyears] += @ruby.libyears if @options.libyears?
+      memo[:sum_seq_delta] += @ruby.version_sequence_delta if @options.releases?
+
+      if @options.versions?
+        memo[:sum_major_version] += @ruby.version_number_delta[0]
+        memo[:sum_minor_version] += @ruby.version_number_delta[1]
+        memo[:sum_patch_version] += @ruby.version_number_delta[2]
+      end
+
     end
 
     def sum_seq_deltas(gem, memo)
       memo[:sum_seq_delta] ||= 0
       memo[:sum_seq_delta] += gem.version_sequence_delta
-
-      memo[:sum_seq_delta] += @ruby.version_sequence_delta if @ruby.outdated?
     end
 
     def sum_version_deltas(gem, memo)
@@ -128,12 +141,6 @@ module LibyearBundler
       memo[:sum_minor_version] += gem.version_number_delta[1]
       memo[:sum_patch_version] ||= 0
       memo[:sum_patch_version] += gem.version_number_delta[2]
-
-      if @ruby.outdated?
-        memo[:sum_major_version] += @ruby.version_number_delta[0]
-        memo[:sum_minor_version] += @ruby.version_number_delta[1]
-        memo[:sum_patch_version] += @ruby.version_number_delta[2]
-      end
     end
   end
 end

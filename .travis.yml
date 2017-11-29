@@ -1,8 +1,4 @@
 language: ruby
-gemfile:
-  - spec/gemfiles/Gemfile.bundler-1.14.rb
-  - spec/gemfiles/Gemfile.bundler-1.15.rb
-  - spec/gemfiles/Gemfile.bundler-1.16.rb
 rvm:
   - 2.4.2
   - 2.3.5

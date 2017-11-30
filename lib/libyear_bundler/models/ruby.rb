@@ -109,6 +109,7 @@ module LibyearBundler
       end
 
       def version_from_bundler
+        return if @lockfile.nil?
         ruby_version_string = ::Bundler::LockfileParser.new(@lockfile).ruby_version
         return if ruby_version_string.nil?
 

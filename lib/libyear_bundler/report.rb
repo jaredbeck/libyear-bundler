@@ -29,7 +29,7 @@ module LibyearBundler
             sum_libyears: 0.0
           }
           @gems.each_with_object(summary) do |gem, memo|
-            sum_libyears(gem, memo) if @options.libyears?
+            increment_libyears(gem, memo) if @options.libyears?
             sum_version_deltas(gem, memo) if @options.versions?
             sum_seq_deltas(gem, memo) if @options.releases?
           end
@@ -113,7 +113,7 @@ module LibyearBundler
       end
     end
 
-    def sum_libyears(gem, memo)
+    def increment_libyears(gem, memo)
       memo[:sum_libyears] += gem.libyears
     end
 

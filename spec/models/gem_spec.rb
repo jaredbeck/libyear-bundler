@@ -93,7 +93,7 @@ module LibyearBundler
           gem = described_class.new(nil, installed_version, newest_version)
           allow(gem)
             .to receive(:versions_sequence)
-            .and_return([newest_version,installed_version])
+            .and_return([newest_version, installed_version])
           expect(gem.version_sequence_delta).to eq(1)
         end
       end

@@ -6,7 +6,7 @@ require 'ostruct'
 module LibyearBundler
   # Uses OptionParser from Ruby's stdlib to hand command-line arguments
   class Options
-    BANNER = <<-BANNER
+    BANNER = <<-BANNER.freeze
 Usage: libyear-bundler [Gemfile ...] [options]
 https://github.com/jaredbeck/libyear-bundler/
     BANNER

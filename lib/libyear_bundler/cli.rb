@@ -71,7 +71,7 @@ module LibyearBundler
     end
 
     def calculate_grand_total
-      if [:libyears?, :releases?, :versions?].all? { |opt| @options[opt] }
+      if %i[libyears? releases? versions?].all? { |opt| @options[opt] }
         [
           libyears_grand_total,
           releases_grand_total,

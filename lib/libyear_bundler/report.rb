@@ -30,8 +30,8 @@ module LibyearBundler
           }
           @gems.each_with_object(summary) do |gem, memo|
             increment_libyears(gem, memo) if @options.libyears?
-            sum_version_deltas(gem, memo) if @options.versions?
-            sum_seq_deltas(gem, memo) if @options.releases?
+            increment_version_deltas(gem, memo) if @options.versions?
+            increment_seq_deltas(gem, memo) if @options.releases?
           end
 
           sum_ruby(summary) if @ruby.outdated?
@@ -129,12 +129,12 @@ module LibyearBundler
 
     end
 
-    def sum_seq_deltas(gem, memo)
+    def increment_seq_deltas(gem, memo)
       memo[:sum_seq_delta] ||= 0
       memo[:sum_seq_delta] += gem.version_sequence_delta
     end
 
-    def sum_version_deltas(gem, memo)
+    def increment_version_deltas(gem, memo)
       memo[:sum_major_version] ||= 0
       memo[:sum_major_version] += gem.version_number_delta[0]
       memo[:sum_minor_version] ||= 0

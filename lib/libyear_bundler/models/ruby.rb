@@ -2,7 +2,6 @@ require 'bundler/lockfile_parser'
 require 'bundler/ruby_version'
 require 'date'
 require 'net/http'
-require 'open3'
 require 'yaml'
 
 require 'libyear_bundler/calculators/libyear'
@@ -118,7 +117,7 @@ module LibyearBundler
 
       def version_from_ruby_version_file
         return unless ::File.exist?('.ruby-version')
-        ::Gem::Version.new(::File.read('.ruby-version'))
+        ::Gem::Version.new(::File.read('.ruby-version').strip)
       end
 
       def version_from_ruby

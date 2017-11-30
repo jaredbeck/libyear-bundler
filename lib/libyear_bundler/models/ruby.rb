@@ -81,7 +81,7 @@ module LibyearBundler
         @_all_versions ||= begin
           uri = ::URI.parse("https://raw.githubusercontent.com/ruby/www.ruby-lang.org/master/_data/releases.yml")
           response = ::Net::HTTP.get_response(uri)
-          # The Date object is passed through here due to a bug where in
+          # The Date object is passed through here due to a bug in
           # YAML#safe_load
           # https://github.com/ruby/psych/issues/262
           ::YAML.safe_load(response.body, [Date]).reject do |version|

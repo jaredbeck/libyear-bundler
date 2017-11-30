@@ -11,6 +11,9 @@ require 'libyear_bundler/calculators/version_sequence_delta'
 module LibyearBundler
   module Models
     class Ruby
+      RUBY_VERSION_DATA_URL = "https://raw.githubusercontent.com/ruby/" \
+        "www.ruby-lang.org/master/_data/releases.yml".freeze
+
       def initialize(lockfile)
         @lockfile = lockfile
       end
@@ -78,7 +81,7 @@ module LibyearBundler
       # available.
       def all_versions
         @_all_versions ||= begin
-          uri = ::URI.parse("https://raw.githubusercontent.com/ruby/www.ruby-lang.org/master/_data/releases.yml")
+          uri = ::URI.parse(RUBY_VERSION_DATA_URL)
           response = ::Net::HTTP.get_response(uri)
           # The Date object is passed through here due to a bug in
           # YAML#safe_load

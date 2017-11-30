@@ -28,23 +28,21 @@ module LibyearBundler
             gems: @gems,
             sum_libyears: 0.0
           }
-          @gems.each_with_object(summary) do |gem, memo|
-            increment_libyears(gem, memo) if @options.libyears?
-            increment_version_deltas(gem, memo) if @options.versions?
-            increment_seq_deltas(gem, memo) if @options.releases?
-          end
+          @gems.each { |gem| increment_metrics_summary(gem, summary) }
 
-          if @ruby.outdated?
-            increment_libyears(@ruby, summary) if @options.libyears?
-            increment_version_deltas(@ruby, summary) if @options.versions?
-            increment_seq_deltas(@ruby, summary) if @options.releases?
-          end
+          increment_metrics_summary(@ruby, summary) if @ruby.outdated?
 
           summary
         end
     end
 
     private
+
+    def increment_metrics_summary(model, summary)
+      increment_libyears(model, summary) if @options.libyears?
+      increment_version_deltas(model, summary) if @options.versions?
+      increment_seq_deltas(model, summary) if @options.releases?
+    end
 
     def put_line_summary(gem_or_ruby)
       meta = meta_line_summary(gem_or_ruby)

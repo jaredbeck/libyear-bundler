@@ -112,7 +112,7 @@ module LibyearBundler
       end
 
       def version_from_bundler
-        return if @lockfile.nil?
+        return unless File.exists?(@lockfile)
         ruby_version_string = ::Bundler::LockfileParser
           .new(@lockfile)
           .ruby_version

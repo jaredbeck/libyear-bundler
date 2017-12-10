@@ -41,6 +41,11 @@ Layout/IndentHeredoc:
 Metrics/BlockLength:
   Max: 40
 
+# Offense count: 1
+Metrics/ClassLength:
+  Exclude:
+    - 'lib/libyear_bundler/report.rb'
+
 # Offense count: 3
 # Configuration parameters: ExpectMatchingDefinition, Regex, IgnoreExecutableScripts, AllowedAcronyms.
 # AllowedAcronyms: CLI, DSL, ACL, API, ASCII, CPU, CSS, DNS, EOF, GUID, HTML, HTTP, HTTPS, ID, IP, JSON, LHS, QPS, RAM, RHS, RPC, SLA, SMTP, SQL, SSH, TCP, TLS, TTL, UDP, UI, UID, UUID, URI, URL, UTF8, VM, XML, XMPP, XSRF, XSS

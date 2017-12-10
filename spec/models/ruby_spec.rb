@@ -75,14 +75,14 @@ module LibyearBundler
 
         context 'newest version is a pre-release' do
           it 'returns the newest non-pre-release version' do
-            newest_prerelease_version = '2.5.0-preview1'
+            older_version = '2.4.1'
             newest_version = '2.4.2'
             ruby = described_class.new(nil)
             allow(ruby)
               .to receive(:all_versions)
               .and_return([
-                { 'version' => newest_prerelease_version },
-                { 'version' => newest_version }
+                { 'version' => newest_version },
+                { 'version' => older_version }
               ])
             expect(ruby.newest_version).to eq(::Gem::Version.new(newest_version))
           end

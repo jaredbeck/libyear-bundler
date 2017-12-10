@@ -55,7 +55,6 @@ Style/Documentation:
   Exclude:
     - 'spec/**/*'
     - 'test/**/*'
-    - 'lib/libyear_bundler/models/gem.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.

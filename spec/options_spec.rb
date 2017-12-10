@@ -10,7 +10,7 @@ module LibyearBundler
     context '--all flag' do
       it 'sets all options to true' do
         opts = described_class.new(['--all']).parse
-        %i[libyears releases versions].each do |flag|
+        [:libyears, :releases, :versions].each do |flag|
           expect(opts.send("#{flag}?".to_sym)).to eq(true)
         end
       end

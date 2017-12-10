@@ -10,6 +10,7 @@ require 'libyear_bundler/calculators/version_sequence_delta'
 
 module LibyearBundler
   module Models
+    # Logic and information pertaining to the installed and newest Ruby versions
     class Ruby
       RUBY_VERSION_DATA_URL = "https://raw.githubusercontent.com/ruby/" \
         "www.ruby-lang.org/master/_data/releases.yml".freeze

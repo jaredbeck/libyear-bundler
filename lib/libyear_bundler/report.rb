@@ -94,7 +94,7 @@ module LibyearBundler
     end
 
     def put_summary(summary)
-      if %i[libyears? releases? versions?].all? { |opt| @options.send(opt) }
+      if [:libyears?, :releases?, :versions?].all? { |opt| @options.send(opt) }
         put_libyear_summary(summary[:sum_years])
         put_sum_seq_delta_summary(summary[:sum_seq_delta])
         put_version_delta_summary(

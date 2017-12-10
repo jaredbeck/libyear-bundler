@@ -4,6 +4,8 @@ require 'json'
 
 module LibyearBundler
   module Models
+    # Logic and information pertaining to the installed and newest versions of
+    # a gem
     class Gem
       def initialize(name, installed_version, newest_version)
         @name = name

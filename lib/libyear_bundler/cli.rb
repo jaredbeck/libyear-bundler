@@ -3,7 +3,7 @@ require "bundler/cli/outdated"
 require "libyear_bundler/bundle_outdated"
 require "libyear_bundler/options"
 require "libyear_bundler/report"
-
+require 'libyear_bundler/models/ruby'
 
 module LibyearBundler
   # The `libyear-bundler` command line program
@@ -53,12 +53,17 @@ module LibyearBundler
       end
     end
 
-    def query
+    def bundle_outdated
       BundleOutdated.new(@gemfile_path).execute
     end
 
     def report
-      @_report ||= Report.new(query, @options)
+      @_report ||= Report.new(bundle_outdated, ruby, @options)
+    end
+
+    def ruby
+      lockfile = @gemfile_path + '.lock'
+      ::LibyearBundler::Models::Ruby.new(lockfile)
     end
 
     def grand_total
@@ -82,7 +87,7 @@ module LibyearBundler
     end
 
     def libyears_grand_total
-      report.to_h[:sum_years].truncate(1)
+      report.to_h[:sum_libyears].truncate(1)
     end
 
     def releases_grand_total

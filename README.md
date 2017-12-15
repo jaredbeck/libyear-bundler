@@ -18,7 +18,7 @@ the Usage section for details.
 gem install libyear-bundler
 ```
 
-## Usage 
+## Usage
 
 Run `libyear-bundler` in a directory with a Gemfile. Verbosity is on by default.
 For simpler output, see the `--grand-total` option.
@@ -102,35 +102,30 @@ System is 9.4 libyears behind
 Total releases behind: 70
 Major, minor, patch versions behind: 2, 6, 10
 ```
-    
+
 #### `--grand-total`
 With no other options, returns the grand-total of libyears. Used with other
 flags, returns the associated grand-total.
 
 ```bash
 $ libyear-bundler Gemfile --grand-total
-9.4  
-  
+9.4
+
 $ libyear-bundler Gemfile --releases --grand-total
 70
-  
+
 $ libyear-bundler Gemfile --versions --grand-total
 [2, 6, 10]
-  
+
 $ libyear-bundler Gemfile --all --grand-total
 9.4
 70
 [2, 6, 10]
 ```
 
-## Development
+## Contributing
 
-```bash
-bundle install
-bundle exec rspec
-```
-
-Pull requests are welcome.
+See CONTRIBUTING.md
 
 ---
 [1] J. Cox, E. Bouwers, M. van Eekelen and J. Visser, Measuring Dependency

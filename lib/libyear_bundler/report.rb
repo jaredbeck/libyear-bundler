@@ -82,15 +82,18 @@ module LibyearBundler
 
     def put_version_delta_summary(sum_major_version, sum_minor_version, sum_patch_version)
       puts format(
-        "Major, minor, patch versions behind: %d, %d, %d",
-        sum_major_version,
-        sum_minor_version,
-        sum_patch_version
+        "Major, minor, patch versions behind: %<major>d, %<minor>d, %<patch>d",
+        major: sum_major_version,
+        minor: sum_minor_version,
+        patch: sum_patch_version
       )
     end
 
     def put_sum_seq_delta_summary(sum_seq_delta)
-      puts format("Total releases behind: %d", sum_seq_delta)
+      puts format(
+        "Total releases behind: %<seq_delta>d",
+        seq_delta: sum_seq_delta
+      )
     end
 
     def put_summary(summary)

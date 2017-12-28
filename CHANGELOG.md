@@ -17,6 +17,21 @@ Fixed:
 
 - None
 
+## 0.5.0 (2017-12-12)
+
+Breaking changes:
+
+- None
+
+Added:
+
+- [#10](https://github.com/jaredbeck/libyear-bundler/pull/10)
+  Include Ruby version in metrics calculations
+
+Fixed:
+
+- None
+
 ## 0.4.0 (2017-07-07)
 
 Breaking changes:

@@ -108,10 +108,6 @@ module LibyearBundler
         v['date']
       end
 
-      def shell_out_to_ruby
-        `ruby --version`.split[1]
-      end
-
       def version_from_bundler
         return unless File.exist?(@lockfile)
         ruby_version_string = ::Bundler::LockfileParser
@@ -128,7 +124,7 @@ module LibyearBundler
       end
 
       def version_from_ruby
-        ::Gem::Version.new(shell_out_to_ruby)
+        Object::RUBY_VERSION
       end
 
       def versions_sequence

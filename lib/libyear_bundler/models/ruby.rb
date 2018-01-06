@@ -43,7 +43,7 @@ module LibyearBundler
       end
 
       def newest_version
-        ::Gem::Version.new(all_versions.first['version'])
+        ::Gem::Version.new(all_stable_versions.first['version'])
       end
 
       def newest_version_release_date
@@ -70,9 +70,6 @@ module LibyearBundler
 
       private
 
-      # We'll only consider non-prerelease versions when determining the
-      # newest version
-      #
       # The following URL is the only official, easily-parseable document with
       # Ruby version information that I'm aware of, but is not supported as such
       # (https://github.com/ruby/www.ruby-lang.org/pull/1637#issuecomment-344934173).
@@ -87,9 +84,16 @@ module LibyearBundler
           # The Date object is passed through here due to a bug in
           # YAML#safe_load
           # https://github.com/ruby/psych/issues/262
-          ::YAML.safe_load(response.body, [Date]).reject do |version|
-            ::Gem::Version.new(version['version']).prerelease?
-          end
+          ::YAML.safe_load(response.body, [Date])
+        end
+      end
+
+      # We'll only consider non-prerelease versions when analyzing ruby version,
+      # which we also implcitly do for gem versions because that's bundler's
+      # default behavior
+      def all_stable_versions
+        all_versions.reject do |version|
+          ::Gem::Version.new(version['version']).prerelease?
         end
       end
 
@@ -102,7 +106,7 @@ module LibyearBundler
       end
 
       def release_date(version)
-        v = all_versions.detect { |ver| ver['version'] == version }
+        v = all_stable_versions.detect { |ver| ver['version'] == version }
         # YAML#safe_load provides an already-parsed Date object, so the following
         # is a Date object
         v['date']
@@ -142,7 +146,7 @@ module LibyearBundler
       end
 
       def versions_sequence
-        all_versions.map { |version| version['version'] }
+        all_stable_versions.map { |version| version['version'] }
       end
     end
   end

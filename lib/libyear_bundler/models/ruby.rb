@@ -109,7 +109,17 @@ module LibyearBundler
       end
 
       def shell_out_to_ruby
-        `ruby --version`.split[1]
+        # ruby appends a 'p' followed by the patch level number
+        # to the version number for stable releases, which returns
+        # a false positive using `::Gem::Version#prerelease?`.
+        # Understandably, because ruby is not a gem, but we'd like
+        # to use `prerelease?`.
+        # Pre-releases are appended with 'dev', and so adhere to
+        # `::Gem::Version`'s definition of a pre-release.
+        # Sources:
+        #   - https://github.com/ruby/ruby/blob/trunk/version.h#L37
+        #   - https://ruby-doc.org/stdlib-1.9.3/libdoc/rubygems/rdoc/Version.html
+        `ruby --version`.split[1].gsub(/p\d/, '')
       end
 
       def version_from_bundler

@@ -43,7 +43,7 @@ module LibyearBundler
       end
 
       def newest_version
-        ::Gem::Version.new(all_stable_versions.first['version'])
+        ::Gem::Version.new(all_stable_versions.first)
       end
 
       def newest_version_release_date
@@ -92,17 +92,18 @@ module LibyearBundler
       # which we also implcitly do for gem versions because that's bundler's
       # default behavior
       def all_stable_versions
-        all_versions.reject do |version|
+        stable_releases = all_versions.reject do |version|
           ::Gem::Version.new(version['version']).prerelease?
         end
+        stable_releases.map { |release| release['version'] }
       end
 
       def installed_version_sequence_index
-        versions_sequence.index(installed_version.to_s)
+        all_stable_versions.index(installed_version.to_s)
       end
 
       def newest_version_sequence_index
-        versions_sequence.index(newest_version.to_s)
+        all_stable_versions.index(newest_version.to_s)
       end
 
       def release_date(version)
@@ -143,10 +144,6 @@ module LibyearBundler
 
       def version_from_ruby
         ::Gem::Version.new(shell_out_to_ruby)
-      end
-
-      def versions_sequence
-        all_stable_versions.map { |version| version['version'] }
       end
     end
   end

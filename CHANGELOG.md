@@ -15,7 +15,7 @@ Added:
 
 Fixed:
 
-- None
+- Stable Ruby releases are no longer considered pre-releases (80534fa)
 
 ## 0.5.0 (2017-12-27)
 

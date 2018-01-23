@@ -3,6 +3,12 @@ inherit_from: .rubocop_todo.yml
 AllCops:
   TargetRubyVersion: 2.1.10
 
+Layout/IndentArray:
+  EnforcedStyle: consistent
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
 Metrics/AbcSize:
   Max: 27
 
@@ -19,12 +25,6 @@ Metrics/LineLength:
 
 Metrics/MethodLength:
   Enabled: false
-
-Style/IndentArray:
-  EnforcedStyle: consistent
-
-Style/MultilineMethodCallIndentation:
-  EnforcedStyle: indented
 
 Style/StringLiterals:
   Enabled: false

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -e
+
+bundle exec rubocop
+bundle exec rspec

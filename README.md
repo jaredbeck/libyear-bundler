@@ -2,15 +2,16 @@
 
 A simple measure of dependency freshness for ruby apps.
 
-Applied to a whole Gemfile, `libyear-bundler` provides a single number for
-determining the maintenance burden of an app’s dependencies. It is a simple
-measure of the time between the release date of the installed dependency and the
-release date of the newest version of the dependency.
+```bash
+$ libyear-bundler Gemfile
+activesupport    4.2.7.1     2016-08-10    5.1.3     2017-08-03       1.0
+         i18n      0.8.0     2017-01-31    0.8.6     2017-07-10       0.4
+         json      1.8.6     2017-01-13    2.1.0     2017-04-18       0.3
+System is 1.7 libyears behind
+```
 
-The inspiration for libyear comes from the technical report “Measuring
-Dependency Freshness in Software Systems”[1]. Other metrics for determining
-dependency freshness outlined in the paper are available in libyear-bundler. See
-the Usage section for details.
+`libyear-bundler` tells you how out-of-date your Gemfile is, in *a single
+number*.
 
 # Install
 
@@ -20,31 +21,30 @@ gem install libyear-bundler
 
 ## Usage
 
-Run `libyear-bundler` in a directory with a Gemfile. Verbosity is on by default.
-For simpler output, see the `--grand-total` option.
+Run `libyear-bundler` in a directory with a Gemfile.
 
-### Options
+### `--libyears` (default)
 
-#### `--libyears` (default)
 Measures the time between your dependencies' installed and newest versions, in
 years.
 
 ```bash
 $ libyear-bundler Gemfile
-                 activesupport        4.2.7.1     2016-08-10          5.1.3     2017-08-03       1.0
-                          i18n          0.8.0     2017-01-31          0.8.6     2017-07-10       0.4
-                          json          1.8.6     2017-01-13          2.1.0     2017-04-18       0.3
-                      minitest         5.10.1     2016-12-02         5.10.3     2017-07-21       0.6
-             minitest_to_rspec          0.6.0     2015-06-09          0.8.0     2017-01-02       1.6
-                   ruby_parser          3.8.4     2017-01-13         3.10.1     2017-07-21       0.5
-                sexp_processor          4.8.0     2017-02-01         4.10.0     2017-07-17       0.5
-                   thread_safe          0.3.5     2015-03-11          0.3.6     2017-02-22       2.0
-                        tzinfo          1.2.2     2014-08-08          1.2.3     2017-03-25       2.6
+     activesupport   4.2.7.1     2016-08-10     5.1.3     2017-08-03     1.0
+              i18n     0.8.0     2017-01-31     0.8.6     2017-07-10     0.4
+              json     1.8.6     2017-01-13     2.1.0     2017-04-18     0.3
+          minitest    5.10.1     2016-12-02    5.10.3     2017-07-21     0.6
+ minitest_to_rspec     0.6.0     2015-06-09     0.8.0     2017-01-02     1.6
+       ruby_parser     3.8.4     2017-01-13    3.10.1     2017-07-21     0.5
+    sexp_processor     4.8.0     2017-02-01    4.10.0     2017-07-17     0.5
+       thread_safe     0.3.5     2015-03-11     0.3.6     2017-02-22     2.0
+            tzinfo     1.2.2     2014-08-08     1.2.3     2017-03-25     2.6
 System is 9.4 libyears behind
 
 ```
 
-#### `--releases`
+### `--releases`
+
 Measures the number of releases between your dependencies' installed and newest
 versions
 
@@ -63,8 +63,8 @@ Total releases behind: 70
 
 ```
 
+### `--versions`
 
-#### `--versions`
 Measures the number of major, minor, and patch versions between your
 dependencies' installed and newest versions
 
@@ -83,7 +83,8 @@ Major, minor, patch versions behind: 2, 6, 10
 
 ```
 
-#### `--all`
+### `--all`
+
 Returns relevant data for each outdated gem, including 'libyears', 'releases',
 and 'versions' metrics
 
@@ -103,7 +104,8 @@ Total releases behind: 70
 Major, minor, patch versions behind: 2, 6, 10
 ```
 
-#### `--grand-total`
+### `--grand-total`
+
 With no other options, returns the grand-total of libyears. Used with other
 flags, returns the associated grand-total.
 
@@ -126,6 +128,11 @@ $ libyear-bundler Gemfile --all --grand-total
 ## Contributing
 
 See CONTRIBUTING.md
+
+## Acknowledgements
+
+The inspiration for libyear comes from the technical report “Measuring
+Dependency Freshness in Software Systems”[1].
 
 ---
 [1] J. Cox, E. Bouwers, M. van Eekelen and J. Visser, Measuring Dependency

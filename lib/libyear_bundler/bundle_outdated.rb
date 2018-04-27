@@ -19,6 +19,11 @@ module LibyearBundler
       bundle_outdated.lines.each_with_object([]) do |line, gems|
         match = BOP_FMT.match(line)
         next if match.nil?
+        if malformed_version_strings?(match)
+          warn "Skipping #{match['name']} because of a malformed version string"
+          next
+        end
+
         gem = ::LibyearBundler::Models::Gem.new(
           match['name'],
           match['installed'],
@@ -46,6 +51,13 @@ module LibyearBundler
         Kernel.exit(CLI::E_BUNDLE_OUTDATED_FAILED)
       end
       stdout
+    end
+
+    # We rely on Gem::Version to handle version strings. If the string is malformed (usually because
+    # of a gem installed from git), then we won't be able to determine the dependency's freshness
+    def malformed_version_strings?(dependency)
+      !Gem::Version.correct?(dependency['installed']) ||
+        !Gem::Version.correct?(dependency['newest'])
     end
   end
 end

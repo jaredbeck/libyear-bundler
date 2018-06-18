@@ -15,8 +15,8 @@ Added:
 
 Fixed:
 
-- Stable Ruby releases are no longer considered pre-releases (80534fa)
-- Avoid crash due to malformed version strings by skipping those dependencies (7b0b2cf)
+- Stable Ruby releases are no longer considered pre-releases (80534fa7fae07ca566aa86b9e038e2292533b5a8)
+- Avoid crash due to malformed version strings by skipping those dependencies (7b0b2cfc9dad47add0d15e3bacc0bca12a4b80a2)
 
 ## 0.5.0 (2017-12-27)
 

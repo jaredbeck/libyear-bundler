@@ -129,7 +129,7 @@ module LibyearBundler
         # Sources:
         #   - https://github.com/ruby/ruby/blob/trunk/version.h#L37
         #   - https://ruby-doc.org/stdlib-1.9.3/libdoc/rubygems/rdoc/Version.html
-        `ruby --version`.split[1].gsub(/p\d/, '')
+        `ruby --version`.split[1].gsub(/p\d*/, '')
       end
 
       def version_from_bundler

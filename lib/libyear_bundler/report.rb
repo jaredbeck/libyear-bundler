@@ -17,7 +17,13 @@ module LibyearBundler
 
     def to_s
       to_h[:gems].each { |gem| put_line_summary(gem) }
-      put_line_summary(@ruby) if @ruby.outdated?
+
+      begin
+        put_line_summary(@ruby) if @ruby.outdated?
+      rescue StandardError => e
+        warn "Unable to calculate libyears for ruby itself: #{e} (line summary)"
+      end
+
       put_summary(to_h)
     end
 
@@ -30,7 +36,11 @@ module LibyearBundler
           }
           @gems.each { |gem| increment_metrics_summary(gem, summary) }
 
-          increment_metrics_summary(@ruby, summary) if @ruby.outdated?
+          begin
+            increment_metrics_summary(@ruby, summary) if @ruby.outdated?
+          rescue StandardError => e
+            warn "Unable to calculate libyears for ruby itself: #{e}"
+          end
 
           summary
         end

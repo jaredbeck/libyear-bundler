@@ -12,8 +12,13 @@ Gem::Specification.new do |spec|
   spec.summary = "A simple measure of dependency freshness"
   spec.homepage = "https://libyear.com"
   spec.licenses = ["GPL-3.0"]
-  spec.files = `git ls-files -z`.split("\x0").reject do |f|
-    f.match(%r{^(test|spec|features)/})
+  spec.files = `git ls-files -z`.split("\x0").select do |f|
+    f.start_with?('lib/') ||
+      [
+        'bin/libyear-bundler',
+        'libyear-bundler.gemspec',
+        'LICENSE.txt'
+      ].include?(f)
   end
   spec.bindir = "bin"
   spec.executables = ["libyear-bundler"]

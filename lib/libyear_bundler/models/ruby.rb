@@ -108,6 +108,11 @@ module LibyearBundler
 
       def release_date(version)
         v = all_stable_versions.detect { |ver| ver['version'] == version }
+
+        if v.nil?
+          raise format('Cannot determine release date for ruby %s', version)
+        end
+
         # YAML#safe_load provides an already-parsed Date object, so the following
         # is a Date object
         v['date']

@@ -15,7 +15,7 @@ Added:
 
 Fixed:
 
-- None
+- Handle failure to determine release date of ruby
 
 ## 0.5.1 (2019-05-09)
 

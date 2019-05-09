@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# Used only by the maintainers of libyear_bundler, this file is a convenient
+# way to run during local development.
+
+ruby -I lib -r libyear_bundler -e 'LibyearBundler::CLI.new(ARGV).run'

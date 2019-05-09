@@ -15,8 +15,26 @@ Added:
 
 Fixed:
 
+- None
+
+## 0.5.1 (2019-05-09)
+
+Breaking changes:
+
+- None
+
+Added:
+
+- None
+
+Fixed:
+
 - Stable Ruby releases are no longer considered pre-releases (80534fa)
 - Avoid crash due to malformed version strings by skipping those dependencies (7b0b2cf)
+
+Dependencies:
+
+- Support bundler 2
 
 ## 0.5.0 (2017-12-27)
 

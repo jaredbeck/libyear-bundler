@@ -12,7 +12,7 @@ bundle exec rspec
 ## Releases
 
 1. Set the version in `lib/libyear_bundler/version.rb`
-   - Follow SEMVER
+   - Follow SemVer
    - Only use integer-dot-integer-dot-integer format, never "pre-releases"
 1. In the changelog,
    - Replace "Unreleased" with the date in ISO-8601 format

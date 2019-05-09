@@ -43,7 +43,7 @@ module LibyearBundler
       end
 
       def newest_version
-        ::Gem::Version.new(all_stable_versions.first['version'])
+        ::Gem::Version.new(all_stable_versions.first)
       end
 
       def newest_version_release_date
@@ -85,6 +85,7 @@ module LibyearBundler
           # YAML#safe_load
           # https://github.com/ruby/psych/issues/262
           ::YAML.safe_load(response.body, [Date])
+            .map { |release| release['version'] }
         end
       end
 
@@ -93,7 +94,7 @@ module LibyearBundler
       # default behavior
       def all_stable_versions
         all_versions.reject do |version|
-          ::Gem::Version.new(version['version']).prerelease?
+          ::Gem::Version.new(version).prerelease?
         end
       end
 
@@ -102,11 +103,11 @@ module LibyearBundler
       end
 
       def newest_version_sequence_index
-        all_stable_versions.index(newest_version.to_s)
+        all_stable_versions.index { |ver| ver == newest_version.to_s }
       end
 
       def release_date(version)
-        v = all_stable_versions.detect { |ver| ver['version'] == version }
+        v = all_stable_versions.detect { |ver| ver == version }
 
         if v.nil?
           raise format('Cannot determine release date for ruby %s', version)

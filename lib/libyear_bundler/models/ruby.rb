@@ -103,7 +103,7 @@ module LibyearBundler
       end
 
       def newest_version_sequence_index
-        all_stable_versions.index { |ver| ver == newest_version.to_s }
+        all_stable_versions.find_index(newest_version.to_s)
       end
 
       def release_date(version)

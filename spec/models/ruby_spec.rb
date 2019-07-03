@@ -70,10 +70,7 @@ module LibyearBundler
           ruby = described_class.new(nil)
           allow(ruby)
             .to receive(:all_versions)
-            .and_return([
-              { 'version' => newest_version },
-              { 'version' => older_version }
-            ])
+            .and_return([newest_version, older_version])
           expect(ruby.newest_version).to eq(::Gem::Version.new(newest_version))
         end
 
@@ -84,10 +81,7 @@ module LibyearBundler
             ruby = described_class.new(nil)
             allow(ruby)
               .to receive(:all_versions)
-              .and_return([
-                { 'version' => prerelease_version },
-                { 'version' => newest_stable_version }
-              ])
+              .and_return([prerelease_version, newest_stable_version])
             expect(ruby.newest_version).to eq(::Gem::Version.new(newest_stable_version))
           end
         end

@@ -24,7 +24,14 @@ Gem::Specification.new do |spec|
   spec.executables = ["libyear-bundler"]
   spec.require_paths = ["lib"]
   spec.required_ruby_version = ">= 2.1"
+
+  # We will support bundler 1 as long as we can. It's important that people
+  # with badly out-of-date systems can still measure how bad they are.
   spec.add_dependency "bundler", ">= 1.14", "< 3"
-  spec.add_development_dependency "rspec", "~> 3.7"
-  spec.add_development_dependency "rubocop", "~> 0.52.1"
+
+  spec.add_development_dependency "rspec", "~> 3.9"
+
+  # rubocop 0.57 drops support for ruby 2.1, so 0.56 is the highest we can
+  # use. We're going to support ruby 2.1 as long as possible. See above.
+  spec.add_development_dependency "rubocop", "~> 0.56.0"
 end

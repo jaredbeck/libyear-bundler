@@ -15,7 +15,8 @@ Added:
 
 Fixed:
 
-- None
+- Fix TypeError in `libyear-bundler --all` (#17)
+- Fix ruby version issue for other metrics (#15)
 
 ## 0.5.2 (2019-05-09)
 

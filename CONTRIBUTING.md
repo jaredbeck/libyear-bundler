@@ -6,7 +6,7 @@ Pull requests are welcome.
 
 ```bash
 bundle install
-bundle exec rspec
+bin/test
 ```
 
 ## Releases

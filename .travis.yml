@@ -1,4 +1,4 @@
-cache: bundler
+cache: false
 language: ruby
 
 # We will support old rubies as long as we can. It's important that people

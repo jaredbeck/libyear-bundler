@@ -15,6 +15,20 @@ Added:
 
 Fixed:
 
+- None
+
+## 0.5.3 (2020-06-26)
+
+Breaking changes:
+
+- None
+
+Added:
+
+- None
+
+Fixed:
+
 - Fix TypeError in `libyear-bundler --all` (#17)
 - Fix ruby version issue for other metrics (#15)
 

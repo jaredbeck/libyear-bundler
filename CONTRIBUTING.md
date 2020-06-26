@@ -18,6 +18,8 @@ bin/test
    - Replace "Unreleased" with the date in ISO-8601 format
    - Add a new "Unreleased" section
 1. Commit
+1. git push origin master
+1. Wait for CI to pass before tagging
 1. git tag -a -m "v0.5.0" "v0.5.0" # or whatever number
 1. git push --tags origin master
 1. gem build libyear-bundler.gemspec

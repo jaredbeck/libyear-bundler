@@ -4,9 +4,29 @@
 
 Pull requests are welcome.
 
+## Support for old rubies
+
+We test all minor versions of ruby, back to 2.1. It's important that people with
+badly out-of-date systems can still measure how bad they are.
+
+### Installing old rubies
+
+> When building Ruby 2.3 or older, [use] OpenSSL 1.0 ..
+> https://github.com/rbenv/ruby-build/wiki#openssl-version-compatibility
+
 ```bash
+brew install rbenv/tap/openssl@1.0
+RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.0)" \
+  rbenv install 2.1.10
+```
+
+## Test
+
+```bash
+rbenv shell 2.1.10 # See installing, above
 bundle install
-bin/test
+bundle exec rubocop
+bundle exec rspec
 ```
 
 ## Releases

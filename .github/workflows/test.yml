@@ -1,0 +1,50 @@
+name: gha-workflow-libyear-bundler-test
+on: [push, pull_request]
+jobs:
+
+  # Linting is a separate job, primary because it only needs to be done once,
+  # and secondarily because jobs are performed concurrently.
+  gha-job-pt-lint:
+    name: Lint
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          # Lowest supported ruby version. See gemspec
+          ruby-version: '2.1'
+      - name: Bundle
+        run: |
+          bundle install --jobs 4 --retry 3
+      - name: Lint
+        run: bundle exec rubocop
+  gha-job-pt-test:
+    name: Ruby ${{ matrix.ruby }}
+    runs-on: ubuntu-18.04
+    strategy:
+      # Currently a one-dimensional matrix of ruby versions. In the future we
+      # add bundler version as the second dimension.
+      matrix:
+        # See lowest supported ruby version in gemspec
+        ruby:
+          - '2.1'
+          - '2.2'
+          - '2.3'
+          - '2.4'
+          - '2.5'
+          - '2.6'
+          - '2.7'
+          - '3.0'
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+      - name: Bundle
+        run: bundle install --jobs 4 --retry 3
+      - name: Test
+        run: bundle exec rspec

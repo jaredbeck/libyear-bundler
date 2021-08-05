@@ -82,8 +82,9 @@ module LibyearBundler
             # The Date object is passed through here due to a bug in
             # YAML#safe_load
             # https://github.com/ruby/psych/issues/262
-            ::YAML.safe_load(response.body, [Date])
-                  .map { |release| release['version'] }
+            ::YAML
+              .safe_load(response.body, [Date])
+              .map { |release| release['version'] }
           end
         end
       end

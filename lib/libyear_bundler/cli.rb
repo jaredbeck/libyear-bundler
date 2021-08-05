@@ -31,8 +31,8 @@ module LibyearBundler
 
       # Update cache
       cache_path = @options.cache_path
-      if cache_path
-        release_date_cache&.save(cache_path)
+      if cache_path && release_date_cache
+        release_date_cache.save(cache_path)
       end
     end
 

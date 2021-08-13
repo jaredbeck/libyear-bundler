@@ -2,6 +2,7 @@ require "bundler/cli"
 require "bundler/cli/outdated"
 require "libyear_bundler/bundle_outdated"
 require "libyear_bundler/options"
+require "libyear_bundler/release_date_cache"
 require "libyear_bundler/report"
 require 'libyear_bundler/models/ruby'
 
@@ -26,6 +27,12 @@ module LibyearBundler
         grand_total
       else
         print report.to_s
+      end
+
+      # Update cache
+      cache_path = @options.cache_path
+      if cache_path && release_date_cache
+        release_date_cache.save(cache_path)
       end
     end
 
@@ -54,7 +61,15 @@ module LibyearBundler
     end
 
     def bundle_outdated
-      BundleOutdated.new(@gemfile_path).execute
+      BundleOutdated.new(@gemfile_path, release_date_cache).execute
+    end
+
+    def release_date_cache
+      @_release_date_cache ||= begin
+        path = @options.cache_path
+        return if path.nil?
+        ReleaseDateCache.load(path)
+      end
     end
 
     def report
@@ -63,7 +78,7 @@ module LibyearBundler
 
     def ruby
       lockfile = @gemfile_path + '.lock'
-      ::LibyearBundler::Models::Ruby.new(lockfile)
+      ::LibyearBundler::Models::Ruby.new(lockfile, release_date_cache)
     end
 
     def grand_total

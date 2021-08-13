@@ -23,10 +23,14 @@ Gem::Specification.new do |spec|
   spec.bindir = "bin"
   spec.executables = ["libyear-bundler"]
   spec.require_paths = ["lib"]
+
+  # We deliberately support dead rubies, as long as possible. It's important
+  # that people with badly out-of-date systems can still measure how bad they
+  # are.
   spec.required_ruby_version = ">= 2.1"
 
-  # We will support bundler 1 as long as we can. It's important that people
-  # with badly out-of-date systems can still measure how bad they are.
+  # We will support bundler 1 as long as we can. See `required_ruby_version`
+  # above.
   spec.add_dependency "bundler", ">= 1.14", "< 3"
 
   spec.add_development_dependency "rspec", "~> 3.9"

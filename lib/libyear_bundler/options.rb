@@ -31,6 +31,10 @@ https://github.com/jaredbeck/libyear-bundler/
           @options.send('versions?=', true)
         end
 
+        opts.on('--cache=CACHE_PATH', 'Use a cache across runs') do |cache_path|
+          @options.cache_path = cache_path
+        end
+
         opts.on('--libyears', '[default] Calculate libyears out-of-date') do
           @options.send('libyears?=', true)
         end

@@ -7,10 +7,39 @@ module LibyearBundler
     # Logic and information pertaining to the installed and newest versions of
     # a gem
     class Gem
-      def initialize(name, installed_version, newest_version)
+      def initialize(name, installed_version, newest_version, release_date_cache)
+        unless release_date_cache.nil? || release_date_cache.is_a?(ReleaseDateCache)
+          raise TypeError, 'Invalid release_date_cache'
+        end
         @name = name
         @installed_version = installed_version
         @newest_version = newest_version
+        @release_date_cache = release_date_cache
+      end
+
+      class << self
+        def release_date(gem_name, gem_version)
+          dep = nil
+          begin
+            dep = ::Bundler::Dependency.new(gem_name, gem_version)
+          rescue ::Gem::Requirement::BadRequirementError => e
+            $stderr.puts "Could not find release date for: #{gem_name}"
+            $stderr.puts(e)
+            $stderr.puts(
+              "Maybe you used git in your Gemfile, which libyear doesn't support " \
+              "yet. Contributions welcome."
+            )
+            return nil
+          end
+          tuples, _errors = ::Gem::SpecFetcher.fetcher.search_for_dependency(dep)
+          if tuples.empty?
+            $stderr.puts "Could not find release date for: #{gem_name}"
+            return nil
+          end
+          tup, source = tuples.first # Gem::NameTuple
+          spec = source.fetch_spec(tup) # raises Gem::RemoteFetcher::FetchError
+          spec.date.to_date
+        end
       end
 
       def installed_version
@@ -18,7 +47,11 @@ module LibyearBundler
       end
 
       def installed_version_release_date
-        release_date(name, installed_version)
+        if @release_date_cache.nil?
+          self.class.release_date(name, installed_version)
+        else
+          @release_date_cache[name, installed_version]
+        end
       end
 
       def installed_version_sequence_index
@@ -45,7 +78,11 @@ module LibyearBundler
       end
 
       def newest_version_release_date
-        release_date(name, newest_version)
+        if @release_date_cache.nil?
+          self.class.release_date(name, newest_version)
+        else
+          @release_date_cache[name, newest_version]
+        end
       end
 
       def version_number_delta
@@ -73,31 +110,6 @@ module LibyearBundler
           parsed_response = JSON.parse(response.body)
           parsed_response.map { |version| version['number'] }
         end
-      end
-
-      # Known issue: Probably performs a network request every time, unless
-      # there's some kind of caching.
-      def release_date(gem_name, gem_version)
-        dep = nil
-        begin
-          dep = ::Bundler::Dependency.new(gem_name, gem_version)
-        rescue ::Gem::Requirement::BadRequirementError => e
-          $stderr.puts "Could not find release date for: #{gem_name}"
-          $stderr.puts(e)
-          $stderr.puts(
-            "Maybe you used git in your Gemfile, which libyear doesn't support " \
-              "yet. Contributions welcome."
-          )
-          return nil
-        end
-        tuples, _errors = ::Gem::SpecFetcher.fetcher.search_for_dependency(dep)
-        if tuples.empty?
-          $stderr.puts "Could not find release date for: #{gem_name}"
-          return nil
-        end
-        tup, source = tuples.first # Gem::NameTuple
-        spec = source.fetch_spec(tup) # raises Gem::RemoteFetcher::FetchError
-        spec.date.to_date
       end
     end
   end

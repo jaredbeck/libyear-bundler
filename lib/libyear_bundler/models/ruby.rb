@@ -15,8 +15,78 @@ module LibyearBundler
       RUBY_VERSION_DATA_URL = "https://raw.githubusercontent.com/ruby/" \
         "www.ruby-lang.org/master/_data/releases.yml".freeze
 
-      def initialize(lockfile)
+      def initialize(lockfile, release_date_cache)
+        unless release_date_cache.nil? || release_date_cache.is_a?(ReleaseDateCache)
+          raise TypeError, 'Invalid release_date_cache'
+        end
         @lockfile = lockfile
+        @release_date_cache = release_date_cache
+      end
+
+      class << self
+        # We'll only consider non-prerelease versions when analyzing ruby version,
+        # which we also implcitly do for gem versions because that's bundler's
+        # default behavior
+        #
+        # @return [Array<String>]
+        def all_stable_versions
+          all_versions.reject do |version|
+            ::Gem::Version.new(version).prerelease?
+          end
+        end
+
+        def newest_version
+          ::Gem::Version.new(all_stable_versions.first)
+        end
+
+        def newest_version_release_date
+          if @release_date_cache.nil?
+            release_date(newest_version)
+          else
+            @release_date_cache[name, newest_version]
+          end
+        end
+
+        def newest_version_sequence_index
+          all_stable_versions.find_index(newest_version.to_s)
+        end
+
+        def release_date(version_obj)
+          version = version_obj.to_s
+          v = all_stable_versions.detect { |ver| ver == version }
+
+          if v.nil?
+            raise format('Cannot determine release date for ruby %s', version)
+          end
+
+          # YAML#safe_load provides an already-parsed Date object, so the following
+          # is a Date object
+          v['date']
+        end
+
+        private
+
+        # The following URL is the only official, easily-parseable document with
+        # Ruby version information that I'm aware of, but is not supported as such
+        # (https://github.com/ruby/www.ruby-lang.org/pull/1637#issuecomment-344934173).
+        # It's been recommend that ruby-lang.org provide a supported document:
+        # https://github.com/ruby/www.ruby-lang.org/pull/1637#issuecomment-344934173
+        # TODO: Use supported document with version information if it becomes
+        # available.
+        #
+        # @return [Array<String>]
+        def all_versions
+          @_all_versions ||= begin
+            uri = ::URI.parse(RUBY_VERSION_DATA_URL)
+            response = ::Net::HTTP.get_response(uri)
+            # The Date object is passed through here due to a bug in
+            # YAML#safe_load
+            # https://github.com/ruby/psych/issues/262
+            ::YAML
+              .safe_load(response.body, [Date])
+              .map { |release| release['version'] }
+          end
+        end
       end
 
       def installed_version
@@ -28,13 +98,17 @@ module LibyearBundler
       end
 
       def installed_version_release_date
-        release_date(installed_version.to_s)
+        if @release_date_cache.nil?
+          self.class.release_date(installed_version)
+        else
+          @release_date_cache[name, installed_version]
+        end
       end
 
       def libyears
         ::LibyearBundler::Calculators::Libyear.calculate(
-          release_date(installed_version.to_s),
-          release_date(newest_version.to_s)
+          installed_version_release_date,
+          self.class.newest_version_release_date
         )
       end
 
@@ -42,12 +116,16 @@ module LibyearBundler
         'ruby'
       end
 
+      # Simply delegates to class method, but we still need it to conform to
+      # the interface expected by `Report#meta_line_summary`.
       def newest_version
-        ::Gem::Version.new(all_stable_versions.first)
+        self.class.newest_version
       end
 
+      # Simply delegates to class method, but we still need it to conform to
+      # the interface expected by `Report#meta_line_summary`.
       def newest_version_release_date
-        release_date(newest_version.to_s)
+        self.class.newest_version_release_date
       end
 
       def outdated?
@@ -57,65 +135,21 @@ module LibyearBundler
       def version_number_delta
         ::LibyearBundler::Calculators::VersionNumberDelta.calculate(
           installed_version,
-          newest_version
+          self.class.newest_version
         )
       end
 
       def version_sequence_delta
         ::LibyearBundler::Calculators::VersionSequenceDelta.calculate(
           installed_version_sequence_index,
-          newest_version_sequence_index
+          self.class.newest_version_sequence_index
         )
       end
 
       private
 
-      # The following URL is the only official, easily-parseable document with
-      # Ruby version information that I'm aware of, but is not supported as such
-      # (https://github.com/ruby/www.ruby-lang.org/pull/1637#issuecomment-344934173).
-      # It's been recommend that ruby-lang.org provide a supported document:
-      # https://github.com/ruby/www.ruby-lang.org/pull/1637#issuecomment-344934173
-      # TODO: Use supported document with version information if it becomes
-      # available.
-      def all_versions
-        @_all_versions ||= begin
-          uri = ::URI.parse(RUBY_VERSION_DATA_URL)
-          response = ::Net::HTTP.get_response(uri)
-          # The Date object is passed through here due to a bug in
-          # YAML#safe_load
-          # https://github.com/ruby/psych/issues/262
-          ::YAML.safe_load(response.body, [Date])
-            .map { |release| release['version'] }
-        end
-      end
-
-      # We'll only consider non-prerelease versions when analyzing ruby version,
-      # which we also implcitly do for gem versions because that's bundler's
-      # default behavior
-      def all_stable_versions
-        all_versions.reject do |version|
-          ::Gem::Version.new(version).prerelease?
-        end
-      end
-
       def installed_version_sequence_index
-        all_stable_versions.index(installed_version.to_s)
-      end
-
-      def newest_version_sequence_index
-        all_stable_versions.find_index(newest_version.to_s)
-      end
-
-      def release_date(version)
-        v = all_stable_versions.detect { |ver| ver == version }
-
-        if v.nil?
-          raise format('Cannot determine release date for ruby %s', version)
-        end
-
-        # YAML#safe_load provides an already-parsed Date object, so the following
-        # is a Date object
-        v['date']
+        self.class.all_stable_versions.index(installed_version.to_s)
       end
 
       def shell_out_to_ruby
@@ -142,6 +176,8 @@ module LibyearBundler
         ::Bundler::RubyVersion.from_string(ruby_version_string).gem_version
       end
 
+      # TODO: this path should probably be relative to `@lockfile` instead
+      # TODO: of being relative to the current working directory.
       def version_from_ruby_version_file
         return unless ::File.exist?('.ruby-version')
         ::Gem::Version.new(::File.read('.ruby-version').strip)

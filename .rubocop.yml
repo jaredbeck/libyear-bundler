@@ -12,12 +12,23 @@ Layout/MultilineMethodCallIndentation:
 Metrics/AbcSize:
   Max: 27
 
+# Not a useful metric compared to, e.g. `AbcSize`.
 Metrics/BlockLength:
-  Exclude:
-    - 'spec/**/*'
+  Enabled: false
+
+# Please use semantic style, e.g. `do` when there's a side-effect, else `{}`.
+# The semantic style is too nuanced to lint, so the cop is disabled.
+Style/BlockDelimiters:
+  Enabled: false
 
 # Annotated tokens harm readability in 90% of format strings.
 Style/FormatStringToken:
+  Enabled: false
+
+# The decision of when to use a guard clause to improve readability is subtle,
+# and it's not clear that it can be linted. Certainly, the default
+# `MinBodyLength` of 1 can actually hurt readability.
+Style/GuardClause:
   Enabled: false
 
 # Too subtle to lint. Prefer normal conditionals, except on very simple lines.
@@ -36,4 +47,3 @@ Metrics/MethodLength:
 
 Style/StringLiterals:
   Enabled: false
-

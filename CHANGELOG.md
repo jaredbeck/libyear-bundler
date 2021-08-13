@@ -17,6 +17,21 @@ Fixed:
 
 - None
 
+## 0.6.0 (2021-08-12)
+
+Breaking changes:
+
+- None
+
+Added:
+
+- [#20](https://github.com/jaredbeck/libyear-bundler/pull/20) -
+  Add --cache option to cache release dates
+
+Fixed:
+
+- None
+
 ## 0.5.3 (2020-06-26)
 
 Breaking changes:

@@ -21,7 +21,11 @@ module LibyearBundler
     class << self
       def load(path)
         if File.exist?(path)
-          new(YAML.safe_load(File.read(path), [Date]))
+          if YAML.method(:safe_load).parameters.include?([:key, :permitted_classes])
+            new(YAML.safe_load(File.read(path), permitted_classes: [Date]))
+          else
+            new(YAML.safe_load(File.read(path), [Date]))
+          end
         else
           new({})
         end

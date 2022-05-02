@@ -1,4 +1,5 @@
 require 'yaml'
+require 'libyear_bundler/yaml_loader'
 
 module LibyearBundler
   # A cache of release dates by name and version, for both gems and rubies.
@@ -29,11 +30,7 @@ module LibyearBundler
     class << self
       def load(path)
         if File.exist?(path)
-          if YAML.method(:safe_load).parameters.include?([:key, :permitted_classes])
-            new(YAML.safe_load(File.read(path), permitted_classes: [Date]))
-          else
-            new(YAML.safe_load(File.read(path), [Date]))
-          end
+          new(YAMLLoader.safe_load(File.read(path)))
         else
           new({})
         end

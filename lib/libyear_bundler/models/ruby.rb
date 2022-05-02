@@ -7,6 +7,7 @@ require 'yaml'
 require 'libyear_bundler/calculators/libyear'
 require 'libyear_bundler/calculators/version_number_delta'
 require 'libyear_bundler/calculators/version_sequence_delta'
+require 'libyear_bundler/yaml_loader'
 
 module LibyearBundler
   module Models
@@ -79,18 +80,8 @@ module LibyearBundler
           @_all_versions ||= begin
             uri = ::URI.parse(RUBY_VERSION_DATA_URL)
             response = ::Net::HTTP.get_response(uri)
-            # The Date object is passed through here due to a bug in
-            # YAML#safe_load
-            # https://github.com/ruby/psych/issues/262
-            if YAML.method(:safe_load).parameters.include?([:key, :permitted_classes])
-              ::YAML
-                .safe_load(response.body, permitted_classes: [Date])
-                .map { |release| release['version'] }
-            else
-              ::YAML
-                .safe_load(response.body, [Date])
-                .map { |release| release['version'] }
-            end
+            # TODO: check response status
+            YAMLLoader.safe_load(response.body).map { |release| release['version'] }
           end
         end
       end

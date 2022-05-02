@@ -41,4 +41,9 @@ Gem::Specification.new do |spec|
 
   # simplecov 0.18 drops support for ruby < 2.4
   spec.add_development_dependency "simplecov", "~> 0.17.1"
+
+  spec.add_development_dependency "webmock", "~> 3.14.0"
+
+  # vcr 6 drops support for older rubies
+  spec.add_development_dependency "vcr", "~> 5.1.0"
 end

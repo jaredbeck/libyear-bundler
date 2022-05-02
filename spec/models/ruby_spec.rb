@@ -3,6 +3,31 @@ require 'spec_helper'
 module LibyearBundler
   module Models
     RSpec.describe Ruby do
+      before(:each) do
+        described_class.instance_variable_set(:@_all_versions, nil)
+      end
+
+      describe '.all_versions' do
+        it 'returns the expected array' do
+          VCR.use_cassette("ruby_releases") do
+            result = described_class.send(:all_versions)
+            expect(result.length).to(be > 100)
+          end
+        end
+
+        context 'when response code is 500' do
+          it 'returns the empty array' do
+            allow(::Net::HTTP).to receive(:start).and_return(
+              double('mock response', code: 500, success?: false)
+            )
+            expect {
+              expect(described_class.send(:all_versions)).to eq([])
+            }.to(output("Unable to get Ruby version list: response code: 500\n").to_stderr)
+            expect(::Net::HTTP).to have_received(:start)
+          end
+        end
+      end
+
       describe '#installed_version' do
         it 'gets the version from bundler' do
           ruby_version = '2.4.2'
@@ -55,9 +80,10 @@ module LibyearBundler
               newest_version_release_date
             )
           allow(ruby).to receive(:installed_version).and_return('9.9.9')
-          result = ruby.libyears
+          VCR.use_cassette("ruby_releases") do
+            expect(ruby.libyears).to eq(1)
+          end
           expect(described_class).to have_received(:release_date).twice
-          expect(result).to eq(1)
         end
       end
 
@@ -143,7 +169,7 @@ module LibyearBundler
         it 'returns the major, minor, and patch versions out-of-date' do
           ruby = described_class.new(nil, nil)
           allow(ruby).to receive(:installed_version_sequence_index).and_return(1)
-          allow(ruby).to receive(:newest_version_sequence_index).and_return(0)
+          allow(described_class).to receive(:newest_version_sequence_index).and_return(0)
           expect(ruby.version_sequence_delta).to eq(1)
         end
       end

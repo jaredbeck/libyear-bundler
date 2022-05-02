@@ -79,9 +79,19 @@ module LibyearBundler
         def all_versions
           @_all_versions ||= begin
             uri = ::URI.parse(RUBY_VERSION_DATA_URL)
-            response = ::Net::HTTP.get_response(uri)
-            # TODO: check response status
-            YAMLLoader.safe_load(response.body).map { |release| release['version'] }
+            opt = { open_timeout: 3, read_timeout: 5, use_ssl: true }
+            response = ::Net::HTTP.start(uri.hostname, uri.port, opt) do |con|
+              con.request_get(uri.path)
+            end
+            if response.is_a?(::Net::HTTPSuccess)
+              YAMLLoader.safe_load(response.body).map { |release| release['version'] }
+            else
+              warn format('Unable to get Ruby version list: response code: %s', response.code)
+              []
+            end
+          rescue ::Timeout::Error
+            warn 'Unable to get Ruby version list: network timeout'
+            []
           end
         end
       end

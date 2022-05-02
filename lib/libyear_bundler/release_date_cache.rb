@@ -18,6 +18,14 @@ module LibyearBundler
       end
     end
 
+    def empty?
+      @data.empty?
+    end
+
+    def size
+      @data.size
+    end
+
     class << self
       def load(path)
         if File.exist?(path)

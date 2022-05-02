@@ -17,6 +17,22 @@ Fixed:
 
 - None
 
+## 0.6.1 (2022-05-02)
+
+Breaking changes:
+
+- None
+
+Added:
+
+- None
+
+Fixed:
+
+- [#23](https://github.com/jaredbeck/libyear-bundler/pull/23) -
+  ArgumentError in Psych 4
+- Add explicit timeout to the HTTP request that gets ruby release dates
+
 ## 0.6.0 (2021-08-12)
 
 Breaking changes:

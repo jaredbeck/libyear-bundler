@@ -38,4 +38,7 @@ Gem::Specification.new do |spec|
   # rubocop 0.57 drops support for ruby 2.1, so 0.56 is the highest we can
   # use. We're going to support ruby 2.1 as long as possible. See above.
   spec.add_development_dependency "rubocop", "~> 0.56.0"
+
+  # simplecov 0.18 drops support for ruby < 2.4
+  spec.add_development_dependency "simplecov", "~> 0.17.1"
 end

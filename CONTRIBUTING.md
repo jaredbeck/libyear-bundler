@@ -20,13 +20,30 @@ RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.0)" \
   rbenv install 2.1.10
 ```
 
+## Lint
+
+Linting is only done with the oldest supported ruby version. Now that we have
+separate `/gemfiles` it's technically possible to specify different rubocops,
+and thus lint any ruby version, but then we'd have to have different rubocop
+config files for the different rubocop versions.
+
+```bash
+rbenv shell 2.1.10 # only lint with oldest supported ruby
+rm .ruby-version # don't want rubocop looking at this, in case it was different
+export BUNDLE_GEMFILE=gemfiles/ruby-2.1.rb
+bundle install
+bundle exec rubocop
+unset BUNDLE_GEMFILE
+```
+
 ## Test
 
 ```bash
-rbenv shell 2.1.10 # See installing, above
+rbenv shell 2.4.10
+export BUNDLE_GEMFILE=gemfiles/ruby-2.4.rb
 bundle install
-bundle exec rubocop
 bundle exec rspec
+unset BUNDLE_GEMFILE
 ```
 
 ## Releases

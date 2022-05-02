@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
-
-# Specify your gem's dependencies in libyear.gemspec
-gemspec
+abort <<-EOS
+  This project uses different gemfiles depeding on ruby version.
+  See CONTRIBUTING.md for usage.
+EOS

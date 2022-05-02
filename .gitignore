@@ -10,3 +10,4 @@
 .ruby-version
 .idea
 .byebug_history
+/gemfiles/*.lock

@@ -28,6 +28,13 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
   Enabled: false
 
+# Heredocs are usually assigned to a variable or constant, which already has a
+# name, so naming the heredoc doesn't add much value. Feel free to name
+# heredocs that are used as anonymous values (not a variable, constant, or
+# named parameter).
+Naming/HeredocDelimiterNaming:
+  Enabled: false
+
 # Please use semantic style, e.g. `do` when there's a side-effect, else `{}`.
 # The semantic style is too nuanced to lint, so the cop is disabled.
 Style/BlockDelimiters:

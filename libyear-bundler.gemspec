@@ -33,17 +33,6 @@ Gem::Specification.new do |spec|
   # above.
   spec.add_dependency "bundler", ">= 1.14", "< 3"
 
-  spec.add_development_dependency "rspec", "~> 3.9"
-
-  # rubocop 0.57 drops support for ruby 2.1, so 0.56 is the highest we can
-  # use. We're going to support ruby 2.1 as long as possible. See above.
-  spec.add_development_dependency "rubocop", "~> 0.56.0"
-
-  # simplecov 0.18 drops support for ruby < 2.4
-  spec.add_development_dependency "simplecov", "~> 0.17.1"
-
-  spec.add_development_dependency "webmock", "~> 3.14.0"
-
-  # vcr 6 drops support for older rubies
-  spec.add_development_dependency "vcr", "~> 5.1.0"
+  # Development dependencies are specified in `/gemfiles`. See CONTRIBUTING.md
+  # for details.
 end

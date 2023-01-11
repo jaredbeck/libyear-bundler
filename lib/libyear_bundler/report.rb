@@ -130,11 +130,15 @@ module LibyearBundler
 
     def increment_libyears(model, memo)
       memo[:sum_libyears] += model.libyears
+    rescue StandardError => e
+      warn "Unable to calculate libyears for #{model.name}: #{e}"
     end
 
     def increment_seq_deltas(model, memo)
       memo[:sum_seq_delta] ||= 0
       memo[:sum_seq_delta] += model.version_sequence_delta
+    rescue StandardError => e
+      warn "Unable to calculate seq deltas for #{model.name}: #{e}"
     end
 
     def increment_version_deltas(model, memo)
@@ -144,6 +148,8 @@ module LibyearBundler
       memo[:sum_minor_version] += model.version_number_delta[1]
       memo[:sum_patch_version] ||= 0
       memo[:sum_patch_version] += model.version_number_delta[2]
+    rescue StandardError => e
+      warn "Unable to calculate version deltas for #{model.name}: #{e}"
     end
   end
 end

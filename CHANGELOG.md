@@ -15,7 +15,8 @@ Added:
 
 Fixed:
 
-- None
+- [#25](https://github.com/jaredbeck/libyear-bundler/issues/25) -
+  Support private gems with dummy packages on public repository
 
 ## 0.6.1 (2022-05-02)
 

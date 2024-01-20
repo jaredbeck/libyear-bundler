@@ -49,6 +49,10 @@ module LibyearBundler
         ::File.exist?("Gemfile")
     end
 
+    def ignored_gems
+      @ignored_gems ||= @options.ignore.split(",")
+    end
+
     def load_gemfile_path
       if first_arg_is_gemfile?
         @argv.first
@@ -64,16 +68,25 @@ module LibyearBundler
       BundleOutdated.new(@gemfile_path, release_date_cache).execute
     end
 
+    def filtered_gems
+      return bundle_outdated if @options.ignore.empty?
+
+      result = bundle_outdated
+      result.reject! { |gem| ignored_gems.include?(gem.name) }
+      result
+    end
+
     def release_date_cache
       @_release_date_cache ||= begin
         path = @options.cache_path
         return if path.nil?
+
         ReleaseDateCache.load(path)
       end
     end
 
     def report
-      @_report ||= Report.new(bundle_outdated, ruby, @options)
+      @_report ||= Report.new(filtered_gems, ruby, @options)
     end
 
     def ruby

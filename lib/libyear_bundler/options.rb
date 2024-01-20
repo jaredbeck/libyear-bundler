@@ -18,7 +18,9 @@ https://github.com/jaredbeck/libyear-bundler/
         opts.banner = BANNER
         opts.program_name = 'libyear-bundler'
         opts.version = ::LibyearBundler::VERSION
+
         @options.send('libyears?=', true)
+        @options.send('ignore=', "")
 
         opts.on_head('-h', '--help', 'Prints this help') do
           puts opts
@@ -33,6 +35,10 @@ https://github.com/jaredbeck/libyear-bundler/
 
         opts.on('--cache=CACHE_PATH', 'Use a cache across runs') do |cache_path|
           @options.cache_path = cache_path
+        end
+
+        opts.on('--ignore=activerecord,activesupport', 'Ignore these gems') do |ignore_list|
+          @options.ignore = ignore_list
         end
 
         opts.on('--libyears', '[default] Calculate libyears out-of-date') do

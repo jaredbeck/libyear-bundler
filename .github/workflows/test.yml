@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: ${{ matrix.is-continue-on-error }}
     strategy:
-      fail-fast: false
+      fail-fast: true
       # Currently a one-dimensional matrix of ruby versions. In the future we
       # should add bundler version as a second dimension.
       matrix:
@@ -42,6 +42,14 @@ jobs:
           - '3.1'
         is-continue-on-error: [false]
         include:
+          # Ruby 2.2 does not currently work on GHA:
+          #
+          # ```
+          # /opt/hostedtoolcache/Ruby/2.2.10/x64/bin/gem install bundler -v ~> 1.0
+          # ERROR:  While executing gem ... (RuntimeError)
+          # Marshal.load reentered at marshal_load
+          # Error: The process '/opt/hostedtoolcache/Ruby/2.2.10/x64/bin/gem' failed with exit code 1
+          # ```
           - ruby: '2.2'
             is-continue-on-error: true
     env:

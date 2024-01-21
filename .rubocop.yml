@@ -6,6 +6,11 @@ AllCops:
 Layout/IndentArray:
   EnforcedStyle: consistent
 
+# We can't use this cop yet because we still support Ruby 2.1, so we can't use
+# tilde heredocs, and we don't want to depend on activesupport.
+Layout/IndentHeredoc:
+  Enabled: false
+
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 

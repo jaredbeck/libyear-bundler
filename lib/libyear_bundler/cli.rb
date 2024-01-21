@@ -26,7 +26,7 @@ module LibyearBundler
       if @options.grand_total?
         grand_total
       else
-        print report.to_s
+        report.write
       end
 
       # Update cache
@@ -73,7 +73,7 @@ module LibyearBundler
     end
 
     def report
-      @_report ||= Report.new(bundle_outdated, ruby, @options)
+      @_report ||= Report.new(bundle_outdated, ruby, @options, $stdout)
     end
 
     def ruby

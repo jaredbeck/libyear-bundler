@@ -9,13 +9,14 @@ module LibyearBundler
 
     # `gems` - Array of `::LibyearBundler::Models::Gem` instances
     # `options` - Instance of `::LibyearBundler::Options`
-    def initialize(gems, ruby, options)
+    def initialize(gems, ruby, options, io)
       @gems = gems
       @ruby = ruby
       @options = options
+      @io = io
     end
 
-    def to_s
+    def write
       to_h[:gems].each { |gem| put_line_summary(gem) }
 
       begin
@@ -72,7 +73,7 @@ module LibyearBundler
         meta << libyears
       end
 
-      puts meta
+      @io.puts meta
     end
 
     def meta_line_summary(gem_or_ruby)
@@ -87,11 +88,11 @@ module LibyearBundler
     end
 
     def put_libyear_summary(sum_libyears)
-      puts format("System is %.1f libyears behind", sum_libyears)
+      @io.puts format("System is %.1f libyears behind", sum_libyears)
     end
 
     def put_version_delta_summary(sum_major_version, sum_minor_version, sum_patch_version)
-      puts format(
+      @io.puts format(
         "Major, minor, patch versions behind: %<major>d, %<minor>d, %<patch>d",
         major: sum_major_version || 0,
         minor: sum_minor_version || 0,
@@ -100,7 +101,7 @@ module LibyearBundler
     end
 
     def put_sum_seq_delta_summary(sum_seq_delta)
-      puts format(
+      @io.puts format(
         "Total releases behind: %<seq_delta>d",
         seq_delta: sum_seq_delta || 0
       )

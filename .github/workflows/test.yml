@@ -23,7 +23,7 @@ jobs:
         run: bundle exec rubocop
   gha-job-pt-test:
     name: Ruby ${{ matrix.ruby }}
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     strategy:
       # Currently a one-dimensional matrix of ruby versions. In the future we
       # should add bundler version as a second dimension.

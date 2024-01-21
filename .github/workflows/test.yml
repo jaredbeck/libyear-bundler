@@ -26,13 +26,13 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: ${{ matrix.is-continue-on-error }}
     strategy:
+      fail-fast: false
       # Currently a one-dimensional matrix of ruby versions. In the future we
       # should add bundler version as a second dimension.
       matrix:
         # See lowest supported ruby version in gemspec
         ruby:
           - '2.1'
-          - '2.2'
           - '2.3'
           - '2.4'
           - '2.5'

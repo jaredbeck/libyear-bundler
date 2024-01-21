@@ -33,7 +33,7 @@ module LibyearBundler
         expect(io.string).to eq(
           <<-EOS
                          rails          7.1.2     2023-11-10          7.1.3     2024-01-16       0.2
-                          ruby         2.4.10                         3.3.0                      0.0
+                          ruby          2.4.2                         3.3.0                      0.0
 System is 0.2 libyears behind
           EOS
         )

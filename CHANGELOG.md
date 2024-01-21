@@ -15,6 +15,8 @@ Added:
 
 Fixed:
 
+- [#32](https://github.com/jaredbeck/libyear-bundler/pull/32) -
+  Fix reading of Ruby version from Gemfile.lock
 - [#25](https://github.com/jaredbeck/libyear-bundler/issues/25) -
   Support private gems with dummy packages on public repository
 

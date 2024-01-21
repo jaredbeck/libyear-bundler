@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
-gem "bundler", ">= 1.14", "< 3"
-gem "rspec", "~> 3.9"
-gem "simplecov", "~> 0.21.2"
-gem "webmock", "~> 3.14.0"
-gem "vcr", "~> 6.1.0"
+gem "bundler", "~> 2.5"
+gem "rspec", "~> 3.12"
+gem "simplecov", "~> 0.22.0"
+gem "webmock", "~> 3.19"
+gem "vcr", "~> 6.2"

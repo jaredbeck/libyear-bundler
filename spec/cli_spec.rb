@@ -15,7 +15,20 @@ module LibyearBundler
 
       context "--ignore list is passed" do
         before do
-          @ignored_gems = %w[actioncable actionmailbox actionmailer actionpack actiontext actionview activejob activemodel activerecord activestorage activesupport railties]
+          @ignored_gems = %w[
+            actioncable
+            actionmailbox
+            actionmailer
+            actionpack
+            actiontext
+            actionview
+            activejob
+            activemodel
+            activerecord
+            activestorage
+            activesupport
+            railties
+          ]
         end
 
         it "outputs a smaller libyear grand-total number because of the ignore" do
@@ -23,8 +36,12 @@ module LibyearBundler
             message = "5.4\n"
 
             expect do
-              described_class.new(["spec/fixtures/03/Gemfile", "--grand-total", "--ignore",
-                                   @ignored_gems.join(",")]).run
+              described_class.new(
+                ["spec/fixtures/03/Gemfile",
+                 "--grand-total",
+                 "--ignore",
+                 @ignored_gems.join(",")]
+              ).run
             end.to output(message).to_stdout
           end
         end
@@ -34,8 +51,9 @@ module LibyearBundler
             allow($stdout).to receive(:write)
 
             report = described_class.new(
-              ["spec/fixtures/03/Gemfile", "--ignore",
-              @ignored_gems.join(",")]
+              ["spec/fixtures/03/Gemfile",
+               "--ignore",
+               @ignored_gems.join(",")]
             ).run
 
             expect(report.to_h[:gems].map(&:name)).to_not include(*@ignored_gems)

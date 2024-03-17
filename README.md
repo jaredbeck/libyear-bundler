@@ -125,6 +125,16 @@ $ libyear-bundler Gemfile --all --grand-total
 [2, 6, 10]
 ```
 
+### `--ignore`
+
+If you want to skip gems from any calculations, you can pass a comma-separated
+list of gems.
+
+```bash
+$ libyear-bundler Gemfile --ignore=activerecord,activesupport
+9.4
+```
+
 ## Contributing
 
 See CONTRIBUTING.md

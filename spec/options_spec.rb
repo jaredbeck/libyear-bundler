@@ -16,6 +16,13 @@ module LibyearBundler
       end
     end
 
+    context '--ignore flag' do
+      it 'sets ignore list' do
+        opts = described_class.new(['--ignore', "activerecord"]).parse
+        expect(opts.ignore).to eq("activerecord")
+      end
+    end
+
     context '--libyears flag' do
       it 'sets libyears? to true' do
         opts = described_class.new(['--libyears']).parse

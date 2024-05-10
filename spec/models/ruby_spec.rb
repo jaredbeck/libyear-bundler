@@ -52,6 +52,18 @@ module LibyearBundler
           allow(ruby).to receive(:version_from_ruby).and_return(ruby_version)
           expect(ruby.installed_version).to eq(ruby_version)
         end
+
+        it 'gets the version from .ruby-version file' do
+          ruby_version = '2.4.2'
+          lockfile = 'spec/fixtures/01/Gemfile.lock'
+          release_date_cache = nil
+          ruby_from_file = described_class.new(lockfile, release_date_cache)
+          allow(ruby_from_file).to receive(:version_from_bundler).and_return(nil)
+
+          ruby = described_class.new(nil, nil)
+          allow(ruby).to receive(:version_from_bundler).and_return(ruby_version)
+          expect(ruby_from_file.installed_version.to_s).to eq(ruby.installed_version)
+        end
       end
 
       describe '.installed_version_release_date' do

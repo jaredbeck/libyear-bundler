@@ -182,11 +182,14 @@ module LibyearBundler
         ::Bundler::RubyVersion.from_string(ruby_version_string).gem_version
       end
 
-      # TODO: this path should probably be relative to `@lockfile` instead
-      # TODO: of being relative to the current working directory.
       def version_from_ruby_version_file
-        return unless ::File.exist?('.ruby-version')
-        ::Gem::Version.new(::File.read('.ruby-version').strip)
+        version_file = File.join(File.dirname(@lockfile), '.ruby-version')
+        return unless File.exist?(version_file)
+
+        version_string = File.read(version_file).strip
+        version = version_string.split('-', 2).last
+
+        ::Gem::Version.new(version) if version
       end
 
       def version_from_ruby

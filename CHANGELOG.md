@@ -15,6 +15,21 @@ Added:
 
 Fixed:
 
+- None
+
+## 0.7.0 (2024-05-11)
+
+Breaking changes:
+
+- None
+
+Added:
+
+- [#37](https://github.com/jaredbeck/libyear-bundler/pull/37) -
+  Added support for engine-x.y.z .ruby-version format
+
+Fixed:
+
 - [#32](https://github.com/jaredbeck/libyear-bundler/pull/32) -
   Fix reading of Ruby version from Gemfile.lock
 - [#25](https://github.com/jaredbeck/libyear-bundler/issues/25) -

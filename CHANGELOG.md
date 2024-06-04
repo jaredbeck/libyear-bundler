@@ -11,7 +11,8 @@ Breaking changes:
 
 Added:
 
-- None
+- [#38](https://github.com/jaredbeck/libyear-bundler/issues/38) -
+  Added support for `--sort` cli option
 
 Fixed:
 

@@ -52,6 +52,10 @@ https://github.com/jaredbeck/libyear-bundler/
         opts.on('--grand-total', 'Return value for given metric(s)') do
           @options.send('grand_total?=', true)
         end
+
+        opts.on('--sort', 'Sort by selected metric(s), in descending order') do
+          @options.send('sort?=', true)
+        end
       end
     end
 

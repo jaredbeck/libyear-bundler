@@ -39,6 +39,13 @@ module LibyearBundler
       end
     end
 
+    context '--sort flag' do
+      it 'sets sort? to true' do
+        opts = described_class.new(['--sort']).parse
+        expect(opts.sort?).to eq(true)
+      end
+    end
+
     context 'invalid option' do
       it 'prints the help' do
         opts = described_class.new(['--black-flag'])

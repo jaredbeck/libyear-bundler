@@ -31,11 +31,12 @@ module LibyearBundler
     def to_h
       @_to_h ||=
         begin
+          gems = sorted_gems(@gems)
           summary = {
-            gems: @gems,
+            gems: gems,
             sum_libyears: 0.0
           }
-          @gems.each { |gem| increment_metrics_summary(gem, summary) }
+          gems.each { |gem| increment_metrics_summary(gem, summary) }
 
           begin
             increment_metrics_summary(@ruby, summary) if @ruby.outdated?
@@ -48,6 +49,20 @@ module LibyearBundler
     end
 
     private
+
+    def sorted_gems(gems)
+      if @options.sort?
+        gems.sort_by do |gem|
+          [
+            (gem.libyears if @options.libyears?),
+            (gem.version_sequence_delta if @options.releases?),
+            (gem.version_number_delta if @options.versions?)
+          ].compact
+        end.reverse
+      else
+        gems
+      end
+    end
 
     def increment_metrics_summary(model, summary)
       increment_libyears(model, summary) if @options.libyears?

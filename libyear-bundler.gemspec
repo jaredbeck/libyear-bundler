@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.email = ["jared@jaredbeck.com"]
   spec.summary = "A simple measure of dependency freshness"
   spec.homepage = "https://libyear.com"
-  spec.licenses = ["GPL-3.0"]
+  spec.licenses = ["GPL-3.0-only"]
   spec.files = `git ls-files -z`.split("\x0").select do |f|
     f.start_with?('lib/') ||
       [

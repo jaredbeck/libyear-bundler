@@ -11,12 +11,27 @@ Breaking changes:
 
 Added:
 
-- [#38](https://github.com/jaredbeck/libyear-bundler/issues/38) -
-  Added support for `--sort` cli option
+- None
 
 Fixed:
 
 - None
+
+## 0.8.0 (2024-09-13)
+
+Breaking changes:
+
+- None
+
+Added:
+
+- [#39](https://github.com/jaredbeck/libyear-bundler/pull/39) -
+  Added support for `--sort` cli option
+
+Fixed:
+
+- [#40](https://github.com/jaredbeck/libyear-bundler/pull/40) - Report
+problematic release dates only once per gem name
 
 ## 0.7.0 (2024-05-11)
 

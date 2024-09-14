@@ -23,22 +23,31 @@ module LibyearBundler
           begin
             dep = ::Bundler::Dependency.new(gem_name, gem_version)
           rescue ::Gem::Requirement::BadRequirementError => e
-            $stderr.puts "Could not find release date for: #{gem_name}"
-            $stderr.puts(e)
-            $stderr.puts(
-              "Maybe you used git in your Gemfile, which libyear doesn't support " \
-              "yet. Contributions welcome."
-            )
+            report_problem(gem_name, <<-MSG)
+Could not find release date for: #{gem_name}
+#{e}
+Maybe you used git in your Gemfile, which libyear doesn't support yet. Contributions welcome.
+            MSG
             return nil
           end
           tuples, _errors = ::Gem::SpecFetcher.fetcher.search_for_dependency(dep)
           if tuples.empty?
-            $stderr.puts "Could not find release date for: #{gem_name}"
+            report_problem(gem_name, "Could not find release date for: #{gem_name}")
             return nil
           end
           tup, source = tuples.first # Gem::NameTuple
           spec = source.fetch_spec(tup) # raises Gem::RemoteFetcher::FetchError
           spec.date.to_date
+        end
+
+        private
+
+        def report_problem(gem_name, message)
+          @reported_gems ||= {}
+          @reported_gems[gem_name] ||= begin
+            $stderr.puts(message)
+            true
+          end
         end
       end
 

@@ -11,12 +11,12 @@ module LibyearBundler
           gems: to_h[:gems].map { |gem| gem_info(gem) },
           ruby: gem_info(@ruby)
         }
-        data[:sum_libyears] = to_h[:sum_libyears].truncate(1) if @options.libyears?
-        data[:sum_seq_delta] = to_h[:sum_seq_delta].truncate(1) if @options.releases?
+        data[:sum_libyears] = to_h[:sum_libyears].round(1) if @options.libyears?
+        data[:sum_seq_delta] = to_h[:sum_seq_delta].round(1) if @options.releases?
         if @options.versions?
-          data[:sum_major_version] = to_h[:sum_major_version].truncate(1)
-          data[:sum_minor_version] = to_h[:sum_minor_version].truncate(1)
-          data[:sum_patch_version] = to_h[:sum_patch_version].truncate(1)
+          data[:sum_major_version] = to_h[:sum_major_version].round(1)
+          data[:sum_minor_version] = to_h[:sum_minor_version].round(1)
+          data[:sum_patch_version] = to_h[:sum_patch_version].round(1)
         end
 
         @io.puts ::JSON.pretty_generate(data)
@@ -42,7 +42,7 @@ module LibyearBundler
         end
 
         if @options.libyears?
-          info[:libyears] = gem_or_ruby.libyears.truncate(1)
+          info[:libyears] = gem_or_ruby.libyears.round(1)
         end
 
         info

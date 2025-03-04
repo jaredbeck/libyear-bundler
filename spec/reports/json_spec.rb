@@ -24,7 +24,7 @@ module LibyearBundler
       "installed_version_release_date": "2023-04-24",
       "newest_version": "1.5.6",
       "newest_version_release_date": "2024-03-01",
-      "libyears": 0.8
+      "libyears": 0.9
     },
     {
       "name": "rails",
@@ -32,7 +32,7 @@ module LibyearBundler
       "installed_version_release_date": "2021-12-15",
       "newest_version": "7.1.3",
       "newest_version_release_date": "2024-01-16",
-      "libyears": 2.0
+      "libyears": 2.1
     }
   ],
   "ruby": {
@@ -66,7 +66,7 @@ module LibyearBundler
       "installed_version_release_date": "2021-12-15",
       "newest_version": "7.1.3",
       "newest_version_release_date": "2024-01-16",
-      "libyears": 2.0
+      "libyears": 2.1
     },
     {
       "name": "pg",
@@ -74,7 +74,7 @@ module LibyearBundler
       "installed_version_release_date": "2023-04-24",
       "newest_version": "1.5.6",
       "newest_version_release_date": "2024-03-01",
-      "libyears": 0.8
+      "libyears": 0.9
     }
   ],
   "ruby": {

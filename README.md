@@ -125,6 +125,35 @@ $ libyear-bundler Gemfile --all --grand-total
 [2, 6, 10]
 ```
 
+### `--json`
+
+Returns the data in JSON format instead of plain text.
+
+```bash
+$ libyear-bundler Gemfile --json
+{
+  "gems": [
+    {
+      "name": "rails",
+      "installed_version": "7.0.0",
+      "installed_version_release_date": "2021-12-15",
+      "newest_version": "7.1.3",
+      "newest_version_release_date": "2024-01-16",
+      "libyears": 2.0
+    }
+  ],
+  "ruby": {
+    "name": "ruby",
+    "installed_version": "2.4.2",
+    "installed_version_release_date": null,
+    "newest_version": "3.3.0",
+    "newest_version_release_date": null,
+    "libyears": 0.0
+  },
+  "sum_libyears": 2.9
+}
+```
+
 ## Contributing
 
 See CONTRIBUTING.md

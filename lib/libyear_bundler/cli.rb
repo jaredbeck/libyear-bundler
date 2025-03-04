@@ -3,7 +3,8 @@ require "bundler/cli/outdated"
 require "libyear_bundler/bundle_outdated"
 require "libyear_bundler/options"
 require "libyear_bundler/release_date_cache"
-require "libyear_bundler/report"
+require "libyear_bundler/reports/console"
+require "libyear_bundler/reports/json"
 require 'libyear_bundler/models/ruby'
 
 module LibyearBundler
@@ -73,7 +74,11 @@ module LibyearBundler
     end
 
     def report
-      @_report ||= Report.new(bundle_outdated, ruby, @options, $stdout)
+      @_report ||= if @options.json?
+        Reports::JSON.new(bundle_outdated, ruby, @options, $stdout)
+      else
+        Reports::Console.new(bundle_outdated, ruby, @options, $stdout)
+      end
     end
 
     def ruby

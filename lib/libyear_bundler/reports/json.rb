@@ -9,7 +9,7 @@ module LibyearBundler
       def write
         data = {
           gems: to_h[:gems].map { |gem| gem_info(gem) },
-          ruby: gem_info(@ruby),
+          ruby: gem_info(@ruby)
         }
         data[:sum_libyears] = to_h[:sum_libyears].truncate(1) if @options.libyears?
         data[:sum_seq_delta] = to_h[:sum_seq_delta].truncate(1) if @options.releases?
@@ -30,12 +30,20 @@ module LibyearBundler
           installed_version: gem_or_ruby.installed_version.to_s,
           installed_version_release_date: gem_or_ruby.installed_version_release_date,
           newest_version: gem_or_ruby.newest_version.to_s,
-          newest_version_release_date: gem_or_ruby.newest_version_release_date,
+          newest_version_release_date: gem_or_ruby.newest_version_release_date
         }
 
-        info[:releases] = gem_or_ruby.version_sequence_delta if @options.releases?
-        info[:versions] = %i[major minor patch].zip(gem_or_ruby.version_number_delta).to_h if @options.versions?
-        info[:libyears] = gem_or_ruby.libyears.truncate(1) if @options.libyears?
+        if @options.releases?
+          info[:releases] = gem_or_ruby.version_sequence_delta
+        end
+
+        if @options.versions?
+          info[:versions] = [:major, :minor, :patch].zip(gem_or_ruby.version_number_delta).to_h
+        end
+
+        if @options.libyears?
+          info[:libyears] = gem_or_ruby.libyears.truncate(1)
+        end
 
         info
       end

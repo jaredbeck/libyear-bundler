@@ -30,7 +30,7 @@ Naming/MemoizedInstanceVariableName:
     - 'lib/libyear_bundler/cli.rb'
     - 'lib/libyear_bundler/models/gem.rb'
     - 'lib/libyear_bundler/models/ruby.rb'
-    - 'lib/libyear_bundler/report.rb'
+    - 'lib/libyear_bundler/reports/base.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.

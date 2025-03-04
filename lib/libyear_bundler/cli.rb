@@ -74,10 +74,9 @@ module LibyearBundler
     end
 
     def report
-      @_report ||= if @options.json?
-        Reports::JSON.new(bundle_outdated, ruby, @options, $stdout)
-      else
-        Reports::Console.new(bundle_outdated, ruby, @options, $stdout)
+      @_report ||= begin
+        reporter_class = @options.json? ? Reports::JSON : Reports::Console
+        reporter_class.new(bundle_outdated, ruby, @options, $stdout)
       end
     end
 

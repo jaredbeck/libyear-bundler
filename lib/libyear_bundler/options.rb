@@ -56,6 +56,10 @@ https://github.com/jaredbeck/libyear-bundler/
         opts.on('--sort', 'Sort by selected metric(s), in descending order') do
           @options.send('sort?=', true)
         end
+
+        opts.on('--json', 'Output JSON') do
+          @options.send('json?=', true)
+        end
       end
     end
 

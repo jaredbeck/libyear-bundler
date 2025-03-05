@@ -11,7 +11,8 @@ Breaking changes:
 
 Added:
 
-- None
+- [#42](https://github.com/jaredbeck/libyear-bundler/pull/42) -
+  Added support for `--json` CLI option
 
 Fixed:
 

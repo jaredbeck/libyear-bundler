@@ -5,7 +5,6 @@
 /coverage/
 /doc/
 /pkg/
-/spec/reports/
 /tmp/
 .ruby-version
 .idea

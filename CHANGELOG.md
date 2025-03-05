@@ -11,6 +11,20 @@ Breaking changes:
 
 Added:
 
+- None
+
+Fixed:
+
+- None
+
+## 0.9.0 (2025-03-05)
+
+Breaking changes:
+
+- None
+
+Added:
+
 - [#42](https://github.com/jaredbeck/libyear-bundler/pull/42) -
   Added support for `--json` CLI option
 

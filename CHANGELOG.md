@@ -15,7 +15,8 @@ Added:
 
 Fixed:
 
-- None
+- [#43](https://github.com/jaredbeck/libyear-bundler/pull/43) -
+  Fixed libyears calculation for Ruby version
 
 ## 0.8.0 (2024-09-13)
 

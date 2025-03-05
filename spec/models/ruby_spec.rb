@@ -82,18 +82,12 @@ module LibyearBundler
 
       describe '#libyears' do
         it 'returns the number of years out-of-date' do
-          installed_version_release_date = Date.new(2017, 1, 1)
-          newest_version_release_date = Date.new(2018, 1, 1)
           ruby = described_class.new(nil, nil)
-          allow(described_class)
-            .to receive(:release_date)
-            .and_return(
-              installed_version_release_date,
-              newest_version_release_date
-            )
-          allow(ruby).to receive(:installed_version).and_return('9.9.9')
+          allow(described_class).to receive(:release_date).and_call_original
+          allow(ruby).to receive(:installed_version).and_return(::Gem::Version.new('3.1.0'))
+          allow(ruby).to receive(:newest_version).and_return(::Gem::Version.new('3.1.2'))
           VCR.use_cassette("ruby_releases") do
-            expect(ruby.libyears).to eq(1)
+            expect(ruby.libyears).to be_within(0.1).of(0.3)
           end
           expect(described_class).to have_received(:release_date).twice
         end

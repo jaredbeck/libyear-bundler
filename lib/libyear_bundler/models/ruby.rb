@@ -62,7 +62,7 @@ module LibyearBundler
 
           # YAML#safe_load provides an already-parsed Date object, so the following
           # is a Date object
-          v['date']
+          @_version_data[v]['date']
         end
 
         private
@@ -84,7 +84,9 @@ module LibyearBundler
               con.request_get(uri.path)
             end
             if response.is_a?(::Net::HTTPSuccess)
-              YAMLLoader.safe_load(response.body).map { |release| release['version'] }
+              @_version_data = YAMLLoader.safe_load(response.body)
+                .map { |release| [release['version'], release] }.to_h
+              @_version_data.keys
             else
               warn format('Unable to get Ruby version list: response code: %s', response.code)
               []

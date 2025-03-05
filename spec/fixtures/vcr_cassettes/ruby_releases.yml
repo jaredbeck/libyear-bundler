@@ -122,7 +122,7 @@ http_interactions:
         # 3.1 series
 
         - version: 3.1.2
-          date: '2022-04-12'
+          date: 2022-04-12
           post: "/en/news/2022/04/12/ruby-3-1-2-released/"
           url:
             gz: https://cache.ruby-lang.org/pub/ruby/3.1/ruby-3.1.2.tar.gz

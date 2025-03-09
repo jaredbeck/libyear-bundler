@@ -15,7 +15,8 @@ Added:
 
 Fixed:
 
-- None
+- [#44](https://github.com/jaredbeck/libyear-bundler/pull/44) -
+  Fixed warnings about "ostruct" when running in Ruby 3.4
 
 ## 0.9.0 (2025-03-05)
 
@@ -47,7 +48,7 @@ Added:
 Fixed:
 
 - [#40](https://github.com/jaredbeck/libyear-bundler/pull/40) - Report
-problematic release dates only once per gem name
+  problematic release dates only once per gem name
 
 ## 0.7.0 (2024-05-11)
 

@@ -35,9 +35,13 @@ Maybe you used git in your Gemfile, which libyear doesn't support yet. Contribut
             report_problem(gem_name, "Could not find release date for: #{gem_name}")
             return nil
           end
-          tup, source = tuples.first # Gem::NameTuple
-          spec = source.fetch_spec(tup) # raises Gem::RemoteFetcher::FetchError
-          spec.date.to_date
+          tup, = tuples.first # Gem::NameTuple
+          uri = URI.parse(
+            "https://rubygems.org/api/v2/rubygems/#{gem_name}/versions/#{tup.version}.json"
+          )
+          response = Net::HTTP.get_response(uri)
+          parsed_response = JSON.parse(response.body)
+          Date.parse(parsed_response["version_created_at"])
         end
 
         private

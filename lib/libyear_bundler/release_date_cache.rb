@@ -8,6 +8,8 @@ module LibyearBundler
     def initialize(data)
       raise TypeError unless data.is_a?(Hash)
       @data = data
+      uri = URI('https://rubygems.org')
+      @http = Net::HTTP.start(uri.host, uri.port, use_ssl: true)
     end
 
     def [](name, version)
@@ -52,7 +54,7 @@ module LibyearBundler
       if name == 'ruby'
         Models::Ruby.release_date(version)
       else
-        Models::Gem.release_date(name, version)
+        Models::Gem.release_date(name, version, @http)
       end
     end
   end

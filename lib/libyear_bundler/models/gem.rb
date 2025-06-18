@@ -1,5 +1,4 @@
 require 'net/http'
-require 'net/http/persistent'
 require 'uri'
 require 'json'
 
@@ -41,7 +40,8 @@ Maybe you used git in your Gemfile, which libyear doesn't support yet. Contribut
           uri = URI.parse(
             "https://rubygems.org/api/v2/rubygems/#{gem_name}/versions/#{tup.version}.json"
           )
-          response = http.request(uri)
+          request = Net::HTTP::Get.new(uri)
+          response = http.request(request)
           parsed_response = JSON.parse(response.body)
           Date.parse(parsed_response["version_created_at"])
         end
@@ -121,7 +121,8 @@ Maybe you used git in your Gemfile, which libyear doesn't support yet. Contribut
       def versions_sequence
         @_versions_sequence ||= begin
           uri = URI.parse("https://rubygems.org/api/v1/versions/#{name}.json")
-          response = @http.request(uri)
+          request = Net::HTTP::Get.new(uri)
+          response = @http.request(request)
           parsed_response = JSON.parse(response.body)
           parsed_response.map { |version| version['number'] }
         end

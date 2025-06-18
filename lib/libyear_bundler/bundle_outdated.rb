@@ -4,7 +4,6 @@ require 'libyear_bundler/calculators/libyear'
 require 'libyear_bundler/calculators/version_number_delta'
 require 'libyear_bundler/calculators/version_sequence_delta'
 require 'libyear_bundler/models/gem'
-require 'net/http/persistent'
 
 module LibyearBundler
   # Responsible for getting all the data that goes into the `Report`.
@@ -18,23 +17,25 @@ module LibyearBundler
     end
 
     def execute
-      http = Net::HTTP::Persistent.new
-      bundle_outdated.lines.each_with_object([]) do |line, gems|
-        match = BOP_FMT.match(line)
-        next if match.nil?
-        if malformed_version_strings?(match)
-          warn "Skipping #{match['name']} because of a malformed version string"
-          next
-        end
+      uri = URI('https://rubygems.org')
+      Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
+        bundle_outdated.lines.each_with_object([]) do |line, gems|
+          match = BOP_FMT.match(line)
+          next if match.nil?
+          if malformed_version_strings?(match)
+            warn "Skipping #{match['name']} because of a malformed version string"
+            next
+          end
 
-        gem = ::LibyearBundler::Models::Gem.new(
-          match['name'],
-          match['installed'],
-          match['newest'],
-          @release_date_cache,
-          http
-        )
-        gems.push(gem)
+          gem = ::LibyearBundler::Models::Gem.new(
+            match['name'],
+            match['installed'],
+            match['newest'],
+            @release_date_cache,
+            http
+          )
+          gems.push(gem)
+        end
       end
     end
 

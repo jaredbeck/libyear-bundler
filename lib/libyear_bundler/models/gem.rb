@@ -8,7 +8,7 @@ module LibyearBundler
     # Logic and information pertaining to the installed and newest versions of
     # a gem
     class Gem
-      def initialize(name, installed_version, newest_version, release_date_cache, http = nil)
+      def initialize(name, installed_version, newest_version, release_date_cache, http)
         unless release_date_cache.nil? || release_date_cache.is_a?(ReleaseDateCache)
           raise TypeError, 'Invalid release_date_cache'
         end
@@ -20,7 +20,7 @@ module LibyearBundler
       end
 
       class << self
-        def release_date(gem_name, gem_version, http = nil)
+        def release_date(gem_name, gem_version, http)
           dep = nil
           begin
             dep = ::Bundler::Dependency.new(gem_name, gem_version)
@@ -41,11 +41,7 @@ Maybe you used git in your Gemfile, which libyear doesn't support yet. Contribut
           uri = URI.parse(
             "https://rubygems.org/api/v2/rubygems/#{gem_name}/versions/#{tup.version}.json"
           )
-          response = if http
-                       http.request(uri)
-                     else
-                       Net::HTTP.get_response(uri)
-                     end
+          response = http.request(uri)
           parsed_response = JSON.parse(response.body)
           Date.parse(parsed_response["version_created_at"])
         end
@@ -125,11 +121,7 @@ Maybe you used git in your Gemfile, which libyear doesn't support yet. Contribut
       def versions_sequence
         @_versions_sequence ||= begin
           uri = URI.parse("https://rubygems.org/api/v1/versions/#{name}.json")
-          response = if @http
-                       @http.request(uri)
-                     else
-                       Net::HTTP.get_response(uri)
-                     end
+          response = @http.request(uri)
           parsed_response = JSON.parse(response.body)
           parsed_response.map { |version| version['number'] }
         end

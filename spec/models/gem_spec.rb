@@ -1,12 +1,17 @@
 require 'spec_helper'
+require 'net/http/persistent'
 
 module LibyearBundler
   module Models
     RSpec.describe Gem do
+      before(:all) do
+        @http = Net::HTTP::Persistent.new
+      end
+
       describe '#installed_version' do
         it 'returns the installed version' do
           newest_version = '1.0.0'
-          gem = described_class.new(nil, newest_version, nil, nil)
+          gem = described_class.new(nil, newest_version, nil, nil, @http)
           expect(gem.installed_version).to eq(::Gem::Version.new(newest_version))
         end
       end
@@ -14,7 +19,7 @@ module LibyearBundler
       describe '#installed_version_release_date' do
         it 'returns the release date of the installed version' do
           date = Date.new(2017, 1, 1)
-          gem = described_class.new(nil, '9.9.9', nil, nil)
+          gem = described_class.new(nil, '9.9.9', nil, nil, @http)
           allow(described_class).to receive(:release_date).and_return(date)
           expect(gem.installed_version_release_date).to eq(date)
         end
@@ -24,7 +29,7 @@ module LibyearBundler
         it 'returns the index' do
           installed_version = '1.0.0'
           newest_version = '2.0.0'
-          gem = described_class.new(nil, installed_version, newest_version, nil)
+          gem = described_class.new(nil, installed_version, newest_version, nil, @http)
           allow(gem)
             .to receive(:versions_sequence)
             .and_return([newest_version, installed_version])
@@ -37,7 +42,7 @@ module LibyearBundler
           allow(::LibyearBundler::Calculators::Libyear)
             .to receive(:calculate)
             .and_return(1)
-          gem = described_class.new(nil, nil, nil, nil)
+          gem = described_class.new(nil, nil, nil, nil, @http)
           allow(gem).to receive(:libyears).and_return(1)
         end
       end
@@ -45,7 +50,7 @@ module LibyearBundler
       describe '#name' do
         it 'returns the gem name' do
           gem_name = 'gem_name'
-          gem = described_class.new(gem_name, nil, nil, nil)
+          gem = described_class.new(gem_name, nil, nil, nil, @http)
           expect(gem.name).to eq(gem_name)
         end
       end
@@ -53,7 +58,7 @@ module LibyearBundler
       describe '#newest_version' do
         it 'returns the newest version' do
           newest_version = '2.0.0'
-          gem = described_class.new(nil, nil, newest_version, nil)
+          gem = described_class.new(nil, nil, newest_version, nil, @http)
           expect(gem.newest_version).to eq(::Gem::Version.new(newest_version))
         end
       end
@@ -61,7 +66,7 @@ module LibyearBundler
       describe '#newest_version_release_date' do
         it 'returns the release date of the newest version' do
           date = Date.new(2017, 1, 1)
-          gem = described_class.new('example', '9.9.0', '9.9.1', nil)
+          gem = described_class.new('example', '9.9.0', '9.9.1', nil, @http)
           allow(described_class).to receive(:release_date).and_return(date)
           result = gem.newest_version_release_date
           expect(described_class).to have_received(:release_date)
@@ -73,7 +78,7 @@ module LibyearBundler
             date = Date.new(2017, 1, 1)
             cache = ::LibyearBundler::ReleaseDateCache.new({})
             allow(cache).to receive(:[]).and_call_original
-            gem = described_class.new('example', '9.9.0', '9.9.1', cache)
+            gem = described_class.new('example', '9.9.0', '9.9.1', cache, @http)
             allow(described_class).to receive(:release_date).and_return(date)
             result = gem.newest_version_release_date
             expect(described_class).to have_received(:release_date)
@@ -87,7 +92,7 @@ module LibyearBundler
         it 'returns the index' do
           installed_version = '1.0.0'
           newest_version = '2.0.0'
-          gem = described_class.new(nil, installed_version, newest_version, nil)
+          gem = described_class.new(nil, installed_version, newest_version, nil, @http)
           allow(gem)
             .to receive(:versions_sequence)
             .and_return([newest_version, installed_version])
@@ -97,7 +102,7 @@ module LibyearBundler
 
       describe '#version_number_delta' do
         it 'returns an array of the major, minor, and patch versions out-of-date' do
-          gem = described_class.new(nil, '1.0.0', '2.0.0', nil)
+          gem = described_class.new(nil, '1.0.0', '2.0.0', nil, @http)
           expect(gem.version_number_delta).to eq([1, 0, 0])
         end
       end
@@ -106,7 +111,7 @@ module LibyearBundler
         it 'returns the number of releases between versions' do
           installed_version = '1.0.0'
           newest_version = '2.0.0'
-          gem = described_class.new(nil, installed_version, newest_version, nil)
+          gem = described_class.new(nil, installed_version, newest_version, nil, @http)
           allow(gem)
             .to receive(:versions_sequence)
             .and_return([newest_version, installed_version])

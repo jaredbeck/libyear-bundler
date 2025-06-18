@@ -1,4 +1,5 @@
 require 'net/http'
+require 'net/http/persistent'
 require 'uri'
 require 'json'
 
@@ -7,7 +8,7 @@ module LibyearBundler
     # Logic and information pertaining to the installed and newest versions of
     # a gem
     class Gem
-      def initialize(name, installed_version, newest_version, release_date_cache)
+      def initialize(name, installed_version, newest_version, release_date_cache, http = nil)
         unless release_date_cache.nil? || release_date_cache.is_a?(ReleaseDateCache)
           raise TypeError, 'Invalid release_date_cache'
         end
@@ -15,10 +16,11 @@ module LibyearBundler
         @installed_version = installed_version
         @newest_version = newest_version
         @release_date_cache = release_date_cache
+        @http = http
       end
 
       class << self
-        def release_date(gem_name, gem_version)
+        def release_date(gem_name, gem_version, http = nil)
           dep = nil
           begin
             dep = ::Bundler::Dependency.new(gem_name, gem_version)
@@ -39,7 +41,11 @@ Maybe you used git in your Gemfile, which libyear doesn't support yet. Contribut
           uri = URI.parse(
             "https://rubygems.org/api/v2/rubygems/#{gem_name}/versions/#{tup.version}.json"
           )
-          response = Net::HTTP.get_response(uri)
+          response = if http
+                       http.request(uri)
+                     else
+                       Net::HTTP.get_response(uri)
+                     end
           parsed_response = JSON.parse(response.body)
           Date.parse(parsed_response["version_created_at"])
         end
@@ -61,7 +67,7 @@ Maybe you used git in your Gemfile, which libyear doesn't support yet. Contribut
 
       def installed_version_release_date
         if @release_date_cache.nil?
-          self.class.release_date(name, installed_version)
+          self.class.release_date(name, installed_version, @http)
         else
           @release_date_cache[name, installed_version]
         end
@@ -92,7 +98,7 @@ Maybe you used git in your Gemfile, which libyear doesn't support yet. Contribut
 
       def newest_version_release_date
         if @release_date_cache.nil?
-          self.class.release_date(name, newest_version)
+          self.class.release_date(name, newest_version, @http)
         else
           @release_date_cache[name, newest_version]
         end
@@ -119,7 +125,11 @@ Maybe you used git in your Gemfile, which libyear doesn't support yet. Contribut
       def versions_sequence
         @_versions_sequence ||= begin
           uri = URI.parse("https://rubygems.org/api/v1/versions/#{name}.json")
-          response = Net::HTTP.get_response(uri)
+          response = if @http
+                       @http.request(uri)
+                     else
+                       Net::HTTP.get_response(uri)
+                     end
           parsed_response = JSON.parse(response.body)
           parsed_response.map { |version| version['number'] }
         end

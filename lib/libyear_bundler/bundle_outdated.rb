@@ -18,7 +18,7 @@ module LibyearBundler
 
     def execute
       uri = URI('https://rubygems.org')
-      Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
+      Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
         bundle_outdated.lines.each_with_object([]) do |line, gems|
           match = BOP_FMT.match(line)
           next if match.nil?

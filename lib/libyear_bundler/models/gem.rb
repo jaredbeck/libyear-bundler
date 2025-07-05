@@ -25,8 +25,18 @@ module LibyearBundler
           )
           request = Net::HTTP::Get.new(uri)
           response = http.request(request)
-          parsed_response = JSON.parse(response.body)
-          Date.parse(parsed_response["version_created_at"])
+          if response.is_a?(Net::HTTPSuccess)
+            parsed_response = JSON.parse(response.body)
+            Date.parse(parsed_response["version_created_at"])
+          else
+            report_problem(
+              gem_name,
+              "Release date not found: #{gem_name}: rubygems.org responded with #{response.code}"
+            )
+            nil
+          end
+        rescue StandardError => e
+          report_problem(gem_name, "Release date not found: #{gem_name}: #{e.inspect}")
         end
 
         private

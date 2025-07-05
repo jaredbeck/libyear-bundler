@@ -20,25 +20,8 @@ module LibyearBundler
 
       class << self
         def release_date(gem_name, gem_version, http)
-          dep = nil
-          begin
-            dep = ::Bundler::Dependency.new(gem_name, gem_version)
-          rescue ::Gem::Requirement::BadRequirementError => e
-            report_problem(gem_name, <<-MSG)
-Could not find release date for: #{gem_name}
-#{e}
-Maybe you used git in your Gemfile, which libyear doesn't support yet. Contributions welcome.
-            MSG
-            return nil
-          end
-          tuples, _errors = ::Gem::SpecFetcher.fetcher.search_for_dependency(dep)
-          if tuples.empty?
-            report_problem(gem_name, "Could not find release date for: #{gem_name}")
-            return nil
-          end
-          tup, = tuples.first # Gem::NameTuple
           uri = URI.parse(
-            "https://rubygems.org/api/v2/rubygems/#{gem_name}/versions/#{tup.version}.json"
+            "https://rubygems.org/api/v2/rubygems/#{gem_name}/versions/#{gem_version}.json"
           )
           request = Net::HTTP::Get.new(uri)
           response = http.request(request)

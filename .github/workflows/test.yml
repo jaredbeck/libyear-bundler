@@ -23,7 +23,7 @@ jobs:
         run: bundle exec rubocop
   gha-job-pt-test:
     name: Ruby ${{ matrix.ruby }}
-    runs-on: ${{ matrix.os || 'ubuntu-latest' }}
+    runs-on: 'ubuntu-latest'
     strategy:
       fail-fast: false
       # Currently a one-dimensional matrix of ruby versions. In the future we
@@ -32,6 +32,7 @@ jobs:
         # See lowest supported ruby version in gemspec
         ruby:
           - '2.1'
+          - '2.2'
           - '2.3'
           - '2.4'
           - '2.5'
@@ -42,17 +43,6 @@ jobs:
           - '3.2'
           - '3.3'
           - '3.4'
-        include:
-          # Ruby 2.2 does not currently work on ubuntu-latest:
-          #
-          # ```
-          # /opt/hostedtoolcache/Ruby/2.2.10/x64/bin/gem install bundler -v ~> 1.0
-          # ERROR:  While executing gem ... (RuntimeError)
-          # Marshal.load reentered at marshal_load
-          # Error: The process '/opt/hostedtoolcache/Ruby/2.2.10/x64/bin/gem' failed with exit code 1
-          # ```
-          - ruby: '2.2'
-            os: 'ubuntu-20.04'
     env:
       # > $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
       # > https://github.com/ruby/setup-ruby#matrix-of-gemfiles

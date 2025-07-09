@@ -17,21 +17,25 @@ module LibyearBundler
     end
 
     def execute
-      bundle_outdated.lines.each_with_object([]) do |line, gems|
-        match = BOP_FMT.match(line)
-        next if match.nil?
-        if malformed_version_strings?(match)
-          warn "Skipping #{match['name']} because of a malformed version string"
-          next
-        end
+      uri = URI('https://rubygems.org')
+      Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
+        bundle_outdated.lines.each_with_object([]) do |line, gems|
+          match = BOP_FMT.match(line)
+          next if match.nil?
+          if malformed_version_strings?(match)
+            warn "Skipping #{match['name']} because of a malformed version string"
+            next
+          end
 
-        gem = ::LibyearBundler::Models::Gem.new(
-          match['name'],
-          match['installed'],
-          match['newest'],
-          @release_date_cache
-        )
-        gems.push(gem)
+          gem = ::LibyearBundler::Models::Gem.new(
+            match['name'],
+            match['installed'],
+            match['newest'],
+            @release_date_cache,
+            http
+          )
+          gems.push(gem)
+        end
       end
     end
 

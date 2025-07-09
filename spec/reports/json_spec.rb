@@ -107,31 +107,31 @@ module LibyearBundler
       def stub_pg_gem
         allow(Models::Gem).to(
           receive(:release_date)
-            .with('pg', ::Gem::Version.new('1.5.0'))
+            .with('pg', ::Gem::Version.new('1.5.0'), nil)
             .and_return(::Date.new(2023, 4, 24))
         )
         allow(Models::Gem).to(
           receive(:release_date)
-            .with('pg', ::Gem::Version.new('1.5.6'))
+            .with('pg', ::Gem::Version.new('1.5.6'), nil)
             .and_return(::Date.new(2024, 3, 1))
         )
 
-        Models::Gem.new('pg', '1.5.0', '1.5.6', nil)
+        Models::Gem.new('pg', '1.5.0', '1.5.6', nil, nil)
       end
 
       def stub_rails_gem
         allow(Models::Gem).to(
           receive(:release_date)
-            .with('rails', ::Gem::Version.new('7.0.0'))
+            .with('rails', ::Gem::Version.new('7.0.0'), nil)
             .and_return(::Date.new(2021, 12, 15))
         )
         allow(Models::Gem).to(
           receive(:release_date)
-            .with('rails', ::Gem::Version.new('7.1.3'))
+            .with('rails', ::Gem::Version.new('7.1.3'), nil)
             .and_return(::Date.new(2024, 1, 16))
         )
 
-        Models::Gem.new('rails', '7.0.0', '7.1.3', nil)
+        Models::Gem.new('rails', '7.0.0', '7.1.3', nil, nil)
       end
     end
   end

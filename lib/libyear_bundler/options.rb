@@ -11,7 +11,7 @@ https://github.com/jaredbeck/libyear-bundler/
     BANNER
 
     Store = Struct.new(
-      :libyears?, :releases?, :versions?, :cache_path, :grand_total?, :sort?, :json?
+      :libyears?, :releases?, :versions?, :cache_path, :grand_total?, :sort?, :json?, :source
     )
 
     def initialize(argv)
@@ -58,6 +58,10 @@ https://github.com/jaredbeck/libyear-bundler/
 
         opts.on('--sort', 'Sort by selected metric(s), in descending order') do
           @options.send(:'sort?=', true)
+        end
+
+        opts.on('--source=SOURCE_URL', 'Use a different gem server, defaults to https://rubygems.org') do |source_url|
+          @options.send(:'source=', source_url)
         end
 
         opts.on('--json', 'Output JSON') do

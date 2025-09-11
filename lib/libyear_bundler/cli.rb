@@ -62,14 +62,14 @@ module LibyearBundler
     end
 
     def bundle_outdated
-      BundleOutdated.new(@gemfile_path, release_date_cache).execute
+      BundleOutdated.new(@gemfile_path, release_date_cache, @options.source).execute
     end
 
     def release_date_cache
       @_release_date_cache ||= begin
         path = @options.cache_path
         return if path.nil?
-        ReleaseDateCache.load(path)
+        ReleaseDateCache.load(path, @options.source)
       end
     end
 

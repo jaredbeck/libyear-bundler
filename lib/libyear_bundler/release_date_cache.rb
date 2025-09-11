@@ -4,11 +4,13 @@ require 'libyear_bundler/yaml_loader'
 module LibyearBundler
   # A cache of release dates by name and version, for both gems and rubies.
   class ReleaseDateCache
+    DEFAULT_SOURCE = 'https://rubygems.org'.freeze
+
     # @param data [Hash<String,Date>]
-    def initialize(data)
+    def initialize(data, source = nil)
       raise TypeError unless data.is_a?(Hash)
       @data = data
-      uri = URI('https://rubygems.org')
+      uri = URI(source || DEFAULT_SOURCE)
       @http = Net::HTTP.start(uri.host, uri.port, use_ssl: true)
     end
 
@@ -30,11 +32,11 @@ module LibyearBundler
     end
 
     class << self
-      def load(path)
+      def load(path, source = nil)
         if File.exist?(path)
-          new(YAMLLoader.safe_load(File.read(path)))
+          new(YAMLLoader.safe_load(File.read(path)), source)
         else
-          new({})
+          new({}, source)
         end
       end
     end

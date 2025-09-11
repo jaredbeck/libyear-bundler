@@ -10,14 +10,16 @@ module LibyearBundler
   class BundleOutdated
     # Format of `bundle outdated --parseable` (BOP)
     BOP_FMT = /\A(?<name>[^ ]+) \(newest (?<newest>[^,]+), installed (?<installed>[^,)]+)/
+    DEFAULT_SOURCE = 'https://rubygems.org'.freeze
 
-    def initialize(gemfile_path, release_date_cache)
+    def initialize(gemfile_path, release_date_cache, source = nil)
       @gemfile_path = gemfile_path
       @release_date_cache = release_date_cache
+      @source = source || DEFAULT_SOURCE
     end
 
     def execute
-      uri = URI('https://rubygems.org')
+      uri = URI(@source)
       Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
         bundle_outdated.lines.each_with_object([]) do |line, gems|
           match = BOP_FMT.match(line)

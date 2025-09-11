@@ -20,9 +20,8 @@ module LibyearBundler
 
       class << self
         def release_date(gem_name, gem_version, http)
-          uri = URI.parse(
-            "https://rubygems.org/api/v2/rubygems/#{gem_name}/versions/#{gem_version}.json"
-          )
+          # uri = URI.parse("https://rubygems.org/api/v2/rubygems/#{gem_name}/versions/#{gem_version}.json")
+          uri = "/api/v2/rubygems/#{gem_name}/versions/#{gem_version}.json"
           request = Net::HTTP::Get.new(uri)
           response = http.request(request)
           if response.is_a?(Net::HTTPSuccess)
@@ -31,7 +30,7 @@ module LibyearBundler
           else
             report_problem(
               gem_name,
-              "Release date not found: #{gem_name}: rubygems.org responded with #{response.code}"
+              "Release date not found: #{gem_name}: #{http.address} responded with #{response.code}"
             )
             nil
           end
@@ -113,7 +112,8 @@ module LibyearBundler
       # Versions are returned ordered by version number, descending
       def versions_sequence
         @_versions_sequence ||= begin
-          uri = URI.parse("https://rubygems.org/api/v1/versions/#{name}.json")
+          # uri = URI.parse("https://rubygems.org/api/v1/versions/#{name}.json")
+          uri = "/api/v1/versions/#{name}.json"
           request = Net::HTTP::Get.new(uri)
           response = @http.request(request)
           parsed_response = JSON.parse(response.body)

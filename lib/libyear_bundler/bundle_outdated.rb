@@ -17,6 +17,7 @@ module LibyearBundler
     end
 
     def execute
+      specs = find_specs
       uri = URI('https://rubygems.org')
       Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
         bundle_outdated.lines.each_with_object([]) do |line, gems|
@@ -31,6 +32,7 @@ module LibyearBundler
             match['name'],
             match['installed'],
             match['newest'],
+            specs[match['name']],
             @release_date_cache,
             http
           )
@@ -57,6 +59,22 @@ module LibyearBundler
         Kernel.exit(CLI::E_BUNDLE_OUTDATED_FAILED)
       end
       stdout
+    end
+
+    def find_specs
+      specs = Hash.new(:other)
+      lockfile_parser = ::Bundler::LockfileParser.new(Bundler.default_lockfile.read)
+      lockfile_parser.specs.each do |spec|
+        specs[spec.name] = if spec.source.nil? || spec.source.remotes.nil?
+                             :other
+                           elsif spec.source.remotes.length == 1 &&
+                                 spec.source.remotes.first.hostname == "rubygems.org"
+                             :rubygems
+                           else
+                             :other
+                           end
+      end
+      specs
     end
 
     # We rely on Gem::Version to handle version strings. If the string is malformed (usually because

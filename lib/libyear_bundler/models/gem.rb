@@ -7,19 +7,32 @@ module LibyearBundler
     # Logic and information pertaining to the installed and newest versions of
     # a gem
     class Gem
-      def initialize(name, installed_version, newest_version, release_date_cache, http)
+      # rubocop:disable Metrics/ParameterLists
+      def initialize(name, installed_version, newest_version, source, release_date_cache, http)
         unless release_date_cache.nil? || release_date_cache.is_a?(ReleaseDateCache)
           raise TypeError, 'Invalid release_date_cache'
         end
         @name = name
         @installed_version = installed_version
         @newest_version = newest_version
+        @source = source
         @release_date_cache = release_date_cache
         @http = http
       end
+      # rubocop:enable Metrics/ParameterLists
 
       class << self
-        def release_date(gem_name, gem_version, http)
+        def release_date(gem_name, gem_version, source, http)
+          if source == :rubygems
+            release_date_from_rubygems(gem_name, gem_version, http)
+          else
+            release_date_from_other(gem_name, gem_version)
+          end
+        end
+
+        private
+
+        def release_date_from_rubygems(gem_name, gem_version, http)
           uri = URI.parse(
             "https://rubygems.org/api/v2/rubygems/#{gem_name}/versions/#{gem_version}.json"
           )
@@ -39,7 +52,29 @@ module LibyearBundler
           report_problem(gem_name, "Release date not found: #{gem_name}: #{e.inspect}")
         end
 
-        private
+        def release_date_from_other(gem_name, gem_version)
+          dep = nil
+          begin
+            dep = ::Bundler::Dependency.new(gem_name, gem_version)
+          rescue ::Gem::Requirement::BadRequirementError => e
+            report_problem(gem_name, <<-MSG)
+Could not find release date for: #{gem_name}
+#{e}
+Maybe you used git in your Gemfile, which libyear doesn't support yet. Contributions welcome.
+            MSG
+            return nil
+          end
+          tuples, _errors = ::Gem::SpecFetcher.fetcher.search_for_dependency(dep)
+          if tuples.empty?
+            report_problem(gem_name, "Could not find release date for: #{gem_name}")
+            return nil
+          end
+          tup, source = tuples.first # Gem::NameTuple
+          spec = source.fetch_spec(tup) # raises Gem::RemoteFetcher::FetchError
+          spec.date.to_date
+        rescue StandardError => e
+          report_problem(gem_name, "Release date not found: #{gem_name}: #{e.inspect}")
+        end
 
         def report_problem(gem_name, message)
           @reported_gems ||= {}
@@ -56,7 +91,7 @@ module LibyearBundler
 
       def installed_version_release_date
         if @release_date_cache.nil?
-          self.class.release_date(name, installed_version, @http)
+          self.class.release_date(name, installed_version, @source, @http)
         else
           @release_date_cache[name, installed_version]
         end
@@ -87,7 +122,7 @@ module LibyearBundler
 
       def newest_version_release_date
         if @release_date_cache.nil?
-          self.class.release_date(name, newest_version, @http)
+          self.class.release_date(name, newest_version, @source, @http)
         else
           @release_date_cache[name, newest_version]
         end

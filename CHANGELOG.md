@@ -15,6 +15,22 @@ Added:
 
 Fixed:
 
+- None
+
+## 0.9.1 (2025-10-09)
+
+Breaking changes:
+
+- None
+
+Added:
+
+- None
+
+Fixed:
+
+- [#49](https://github.com/jaredbeck/libyear-bundler/pull/49) -
+  Fixed libyears calculation for Rubygems gems
 - [#44](https://github.com/jaredbeck/libyear-bundler/pull/44) -
   Fixed warnings about "ostruct" when running in Ruby 3.4
 

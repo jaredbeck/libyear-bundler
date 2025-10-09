@@ -65,7 +65,9 @@ module LibyearBundler
       specs = Hash.new(:other)
       lockfile_parser = ::Bundler::LockfileParser.new(Bundler.default_lockfile.read)
       lockfile_parser.specs.each do |spec|
-        specs[spec.name] = if spec.source.nil? || spec.source.remotes.nil?
+        specs[spec.name] = if spec.source.nil?
+                             :other
+                           elsif !spec.source.respond_to?(:remotes) || spec.source.remotes.nil?
                              :other
                            elsif spec.source.remotes.length == 1 &&
                                  spec.source.remotes.first.hostname == "rubygems.org"

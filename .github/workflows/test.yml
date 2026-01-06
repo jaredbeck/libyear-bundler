@@ -43,6 +43,7 @@ jobs:
           - '3.2'
           - '3.3'
           - '3.4'
+          - '4.0'
     env:
       # > $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
       # > https://github.com/ruby/setup-ruby#matrix-of-gemfiles

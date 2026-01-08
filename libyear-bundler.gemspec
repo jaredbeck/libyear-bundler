@@ -31,7 +31,7 @@ Gem::Specification.new do |spec|
 
   # We will support bundler 1 as long as we can. See `required_ruby_version`
   # above.
-  spec.add_dependency "bundler", ">= 1.14", "< 3"
+  spec.add_dependency "bundler", ">= 1.14", "< 5"
 
   # Development dependencies are specified in `/gemfiles`. See CONTRIBUTING.md
   # for details.

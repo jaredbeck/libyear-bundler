@@ -15,7 +15,8 @@ Added:
 
 Fixed:
 
-- None
+- [#54](https://github.com/jaredbeck/libyear-bundler/pull/54) -
+  Added support for Bundler 4.x
 
 ## 0.9.1 (2025-10-09)
 

@@ -57,12 +57,12 @@ System is 2.9 libyears behind
       def stub_pg_gem
         allow(Models::Gem).to(
           receive(:release_date)
-            .with('pg', ::Gem::Version.new('1.5.0'), nil)
+            .with('pg', ::Gem::Version.new('1.5.0'), nil, 'https://rubygems.org/')
             .and_return(::Date.new(2023, 4, 24))
         )
         allow(Models::Gem).to(
           receive(:release_date)
-            .with('pg', ::Gem::Version.new('1.5.6'), nil)
+            .with('pg', ::Gem::Version.new('1.5.6'), nil, 'https://rubygems.org/')
             .and_return(::Date.new(2024, 3, 1))
         )
 
@@ -72,12 +72,12 @@ System is 2.9 libyears behind
       def stub_rails_gem
         allow(Models::Gem).to(
           receive(:release_date)
-            .with('rails', ::Gem::Version.new('7.0.0'), nil)
+            .with('rails', ::Gem::Version.new('7.0.0'), nil, 'https://rubygems.org/')
             .and_return(::Date.new(2021, 12, 15))
         )
         allow(Models::Gem).to(
           receive(:release_date)
-            .with('rails', ::Gem::Version.new('7.1.3'), nil)
+            .with('rails', ::Gem::Version.new('7.1.3'), nil, 'https://rubygems.org/')
             .and_return(::Date.new(2024, 1, 16))
         )
 

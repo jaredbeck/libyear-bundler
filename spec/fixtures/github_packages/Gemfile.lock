@@ -1,0 +1,21 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    json (2.1.0)
+
+GEM
+  remote: https://rubygems.pkg.github.com/secret_org/
+  specs:
+    private_gem1 (2.6.0)
+    private_gem2 (5.5.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  private_gem1 (~> 2.6)
+  private_gem2 (~> 5.2)
+  json (= 2.1.0)
+
+BUNDLED WITH
+   2.5.0

@@ -1,5 +1,6 @@
 require "English"
 require "open3"
+require 'bundler'
 require 'libyear_bundler/calculators/libyear'
 require 'libyear_bundler/calculators/version_number_delta'
 require 'libyear_bundler/calculators/version_sequence_delta'
@@ -17,6 +18,7 @@ module LibyearBundler
     end
 
     def execute
+      gem_sources = load_gem_sources
       uri = URI('https://rubygems.org')
       Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
         bundle_outdated.lines.each_with_object([]) do |line, gems|
@@ -32,7 +34,8 @@ module LibyearBundler
             match['installed'],
             match['newest'],
             @release_date_cache,
-            http
+            http,
+            source: gem_sources[match['name']] || 'https://rubygems.org/'
           )
           gems.push(gem)
         end
@@ -40,6 +43,22 @@ module LibyearBundler
     end
 
     private
+
+    def load_gem_sources
+      lockfile_path = @gemfile_path.sub(/Gemfile$/, 'Gemfile.lock')
+      return {} unless File.exist?(lockfile_path)
+
+      lockfile_contents = File.read(lockfile_path)
+      lockfile = Bundler::LockfileParser.new(lockfile_contents)
+
+      lockfile.specs.each_with_object({}) do |spec, hash|
+        if spec.source.respond_to?(:remotes)
+          hash[spec.name] = spec.source.remotes.first.to_s
+        end
+      end
+    rescue StandardError
+      {}
+    end
 
     def bundle_outdated
       stdout, stderr, status = Open3.capture3(

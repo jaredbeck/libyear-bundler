@@ -8,13 +8,15 @@ module LibyearBundler
       FMT_LIBYEARS_COLUMN = "%10.1f".freeze
       FMT_RELEASES_COLUMN = "%10d".freeze
       FMT_VERSIONS_COLUMN = "%15s".freeze
-      FMT_SUMMARY_COLUMNS = "%30s%15s%15s%15s%15s".freeze
+      FMT_SUMMARY_COLUMNS = "%*s%15s%15s%15s%15s".freeze
 
       def write
-        to_h[:gems].each { |gem| put_line_summary(gem) }
+        gems = to_h[:gems]
+        gem_name_width = gem_name_width(gems)
+        gems.each { |gem| put_line_summary(gem, gem_name_width) }
 
         begin
-          put_line_summary(@ruby) if @ruby.outdated?
+          put_line_summary(@ruby, gem_name_width) if @ruby.outdated?
         rescue StandardError => e
           warn "Unable to calculate libyears for ruby itself: #{e} (line summary)"
         end
@@ -24,8 +26,18 @@ module LibyearBundler
 
       private
 
-      def put_line_summary(gem_or_ruby)
-        meta = meta_line_summary(gem_or_ruby)
+      def gem_name_width(gems)
+        default_width = 30
+        longest_length = gems.map { |gem| gem.name.length }.max
+        if longest_length
+          [longest_length, default_width].max
+        else
+          default_width
+        end
+      end
+
+      def put_line_summary(gem_or_ruby, gem_name_width)
+        meta = meta_line_summary(gem_or_ruby, gem_name_width)
 
         if @options.releases?
           releases = format(FMT_RELEASES_COLUMN, gem_or_ruby.version_sequence_delta)
@@ -45,9 +57,10 @@ module LibyearBundler
         @io.puts meta
       end
 
-      def meta_line_summary(gem_or_ruby)
+      def meta_line_summary(gem_or_ruby, gem_name_width)
         format(
           FMT_SUMMARY_COLUMNS,
+          gem_name_width,
           gem_or_ruby.name,
           gem_or_ruby.installed_version.to_s,
           gem_or_ruby.installed_version_release_date,

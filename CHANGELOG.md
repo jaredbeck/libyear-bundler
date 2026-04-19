@@ -17,6 +17,21 @@ Fixed:
 
 - None
 
+## 0.9.3 (2026-04-19)
+
+Breaking changes:
+
+- None
+
+Added:
+
+- None
+
+Fixed:
+
+- [#56](https://github.com/jaredbeck/libyear-bundler/pull/56) -
+  Fix console output for gems with long names
+
 ## 0.9.2 (2026-01-20)
 
 Breaking changes:

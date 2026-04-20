@@ -24,6 +24,12 @@ Metrics/BlockLength:
 Metrics/ClassLength:
   Max: 119
 
+# Offense count: 1
+# Configuration parameters: CountKeywordArgs.
+Metrics/ParameterLists:
+  Exclude:
+    - 'lib/libyear_bundler/models/gem.rb'
+
 # Offense count: 5
 Naming/MemoizedInstanceVariableName:
   Exclude:
